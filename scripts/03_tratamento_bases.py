@@ -140,7 +140,8 @@ def numero_original(valor: str, campo: str) -> Decimal | None:
 # -----------------------------------------------------------------------------
 def datas_originais(serie: pd.Series) -> pd.Series:
     preenchidos = serie.ne("")
-    if not (bool(serie.loc[preenchidos].str.fullmatch(r"[0-9]{2}/[0-9]{2}/[0-9]{4}").all())):
+    formatos_validos = serie.loc[preenchidos].str.fullmatch(r"[0-9]{2}/[0-9]{2}/[0-9]{4}")
+    if not bool(formatos_validos.all()):
         raise ValueError(f"Formato de data não autorizado em {serie.name}.")
     # Somente ausência literal vira nulo. Datas preenchidas inválidas são erro.
     return pd.to_datetime(serie.mask(~preenchidos), format="%d/%m/%Y", errors="raise")
@@ -190,7 +191,8 @@ def tratar_quadro(base_original: pd.DataFrame, ano: int) -> tuple[pd.DataFrame, 
     for campo in DATAS:
         referencias_datas[campo] = datas_originais(registros_mantidos[campo])
     for campo in DATAS:
-        base_tratada[campo] = pd.Series(pd.array(referencias_datas[campo], dtype=DATA), index=base_tratada.index)
+        datas_convertidas = pd.array(referencias_datas[campo], dtype=DATA)
+        base_tratada[campo] = pd.Series(datas_convertidas, index=base_tratada.index)
 
     # 6. Converter ano_compra e quantidade para inteiros; capacidade e preços
     # para decimais exatos. Recusar frações nos inteiros evita truncar valores.
@@ -300,7 +302,9 @@ def tratar_quadro(base_original: pd.DataFrame, ano: int) -> tuple[pd.DataFrame, 
     for coluna, tipo in base_tratada.dtypes.items():
         tipos_saida[coluna] = str(tipo)
     resumo = {
-        "ano": ano, "registros_antes": len(base_original), "registros_depois": len(base_tratada),
+        "ano": ano,
+        "registros_antes": len(base_original),
+        "registros_depois": len(base_tratada),
         "duplicados_removidos": int(duplicados.sum()),
         "esfera_zero_antes": int(base_original["esfera"].eq("0").sum()),
         "nao_informado_depois": int(base_tratada["esfera"].eq("NAO_INFORMADO").sum()),
@@ -315,20 +319,19 @@ def tratar_quadro(base_original: pd.DataFrame, ano: int) -> tuple[pd.DataFrame, 
         "registros_origem_com_incoerencia_temporal_json": json.dumps(registros_com_incoerencia),
         "inconsistencias_ano_compra": inconsistencias_ano,
         "divergencias_preco_total": divergencias_preco,
-        "maior_diferenca_preco_total": str(maior_diferenca), "tolerancia_preco_total": str(TOLERANCIA),
+        "maior_diferenca_preco_total": str(maior_diferenca),
+        "tolerancia_preco_total": str(TOLERANCIA),
         "positivos_tornados_invalidos": positivos_invalidos,
         "nulos_capacidade_antes": int(base_original["capacidade"].eq("").sum()),
         "nulos_insercao_antes": int(base_original["insercao"].eq("").sum()),
         "ano_parcial": ano == 2026,
         "tipos_saida_json": json.dumps(tipos_saida, ensure_ascii=False),
         "status": "CONCLUIDO_COM_RESSALVAS_DA_ORIGEM" if erros_temporais else "VALIDADO",
-        "observacoes": (
-            "Erros de datas contam registros com incoerência temporal já presente: "
+        "observacoes": "Erros de datas contam registros com incoerência temporal já presente: "
             "inserção anterior à compra ou compra fora do ano. Nenhuma data inválida "
             "foi ocultada; falhas de conversão interrompem a execução. Incoerências "
             "da origem preservadas, sem correção autorizada. Duplicação definida "
-            "antes das conversões, sobre as 25 colunas originais."
-        ),
+            "antes das conversões, sobre as 25 colunas originais.",
     }
     if len(base_original) != len(base_tratada) + len(auditoria):
         raise ValueError("Contagem antes/depois não fecha.")
@@ -395,17 +398,18 @@ def main() -> None:
         if caminho.is_file():
             hashes_brutos[caminho] = hash_arquivo(caminho)
     for ano in ANOS:
-        if not (BRUTOS / str(ano) / f"{ano}.csv" in hashes_brutos):
+        if BRUTOS / str(ano) / f"{ano}.csv" not in hashes_brutos:
             raise ValueError(f"Base de {ano} ausente.")
     hash_readme = hash_arquivo(RAIZ / "README.md")
     PROCESSADOS.mkdir(parents=True, exist_ok=True)
-    resumos, removidos = [], []
+    resumos = []
+    removidos = []
     # Preparar as saídas em pasta temporária dentro de processados.
     # Isso permite reler os resultados antes de substituir as saídas definitivas.
     # Conferir o caminho também mantém a limpeza temporária dentro dessa pasta.
     with tempfile.TemporaryDirectory(prefix=".tratamento_", dir=PROCESSADOS) as temporario:
         pasta_temporaria = Path(temporario).resolve()
-        if not (pasta_temporaria.is_relative_to(PROCESSADOS.resolve())):
+        if not pasta_temporaria.is_relative_to(PROCESSADOS.resolve()):
             raise ValueError("Pasta temporária fora de processados.")
         arquivos_para_publicar = []
         for ano in ANOS:
@@ -453,7 +457,10 @@ def main() -> None:
         POR_ANO.mkdir(parents=True, exist_ok=True)
         ANALISES.mkdir(parents=True, exist_ok=True)
         for origem, destino in arquivos_para_publicar:
-            if not (destino.resolve().is_relative_to(POR_ANO.resolve()) or destino.resolve().is_relative_to(ANALISES.resolve())):
+            destino_resolvido = destino.resolve()
+            destino_anual = destino_resolvido.is_relative_to(POR_ANO.resolve())
+            destino_auditoria = destino_resolvido.is_relative_to(ANALISES.resolve())
+            if not destino_anual and not destino_auditoria:
                 raise ValueError("Destino de publicação fora do escopo.")
             hash_esperado = hash_arquivo(origem)
             origem.replace(destino)

@@ -7,11 +7,17 @@ Uma nova execução substitui apenas esse relatório, mantendo as bases intactas
 
 import csv
 import hashlib
+import io
 import json
 import sys
 from decimal import Decimal, localcontext
 from pathlib import Path
 import pandas as pd
+
+# Informar qual valor ordena os grupos permite explicar o ranking sem uma lambda.
+def valor_total_do_grupo(grupo):
+    return grupo["valor_total_grupo"]
+
 
 # 1. Conferir o ambiente e definir caminhos para reproduzir a análise sem .venv.
 raiz = Path(__file__).resolve().parents[1]
@@ -31,11 +37,11 @@ for caminho in (caminho_base, raiz / "README.md"):
 # 3. Filtrar 2025 em memória, mantendo o índice para localizar a linha no Parquet.
 # O número de registro abaixo começa em 1 e não é um identificador de compra.
 base = pd.read_parquet(caminho_base, engine="pyarrow", dtype_backend="pyarrow")
-ano = base.loc[base["ano_arquivo"].eq(2025)]
-if len(ano) != 26214:
+base_2025 = base.loc[base["ano_arquivo"].eq(2025)]
+if len(base_2025) != 26214:
     raise ValueError("Contagem de 2025 inesperada.")
 for campo in ("preco_total", "preco_unitario", "qtd_itens_comprados"):
-    if ano[campo].isna().any():
+    if base_2025[campo].isna().any():
         raise ValueError(f"Ausências impedem validar {campo}.")
 
 # 4. Usar Decimal para somar e multiplicar sem aproximações de ponto flutuante.
@@ -44,14 +50,14 @@ linhas = []
 resumos_terminal = []
 with localcontext() as contexto:
     contexto.prec = 60
-    total = sum(ano["preco_total"], Decimal("0"))
+    total = sum(base_2025["preco_total"], Decimal("0"))
     if total != Decimal("34930896708.4730"):
         raise ValueError("Total diferente do KPI anteriormente calculado.")
     divergencias = 0
     diferencas_nao_zero = 0
     maior_diferenca = Decimal("0")
     for quantidade, unitario, valor in zip(
-        ano["qtd_itens_comprados"], ano["preco_unitario"], ano["preco_total"], strict=True
+        base_2025["qtd_itens_comprados"], base_2025["preco_unitario"], base_2025["preco_total"], strict=True
     ):
         diferenca = abs(valor - Decimal(quantidade) * unitario)
         maior_diferenca = max(maior_diferenca, diferenca)
@@ -61,16 +67,20 @@ with localcontext() as contexto:
     # 5. Ordenar registros pelas três medidas para examinar valores e quantidades.
     # Cada lista tem dez linhas; as mesmas linhas podem aparecer em listas diferentes.
     for campo in ("preco_total", "preco_unitario", "qtd_itens_comprados"):
-        maiores = ano.sort_values(campo, ascending=False, kind="stable").head(10)
+        maiores = base_2025.sort_values(campo, ascending=False, kind="stable").head(10)
         posicao = 0
         for indice, registro in maiores.iterrows():
             posicao += 1
             linha = registro.to_dict()
             linha.update({
-                "ano": 2025, "secao": "maiores_registros_" + campo,
-                "posicao": posicao, "registro_parquet_1_base": int(indice) + 1,
-                "criterio_ordenacao": campo, "valor_criterio": registro[campo],
-                "valor_total_grupo": registro["preco_total"], "registros_grupo": 1,
+                "ano": 2025,
+                "secao": "maiores_registros_" + campo,
+                "posicao": posicao,
+                "registro_parquet_1_base": int(indice) + 1,
+                "criterio_ordenacao": campo,
+                "valor_criterio": registro[campo],
+                "valor_total_grupo": registro["preco_total"],
+                "registros_grupo": 1,
                 "participacao_total_2025_pct": registro["preco_total"] / total * 100,
                 "total_2025": total,
                 "diferenca_preco_total": abs(
@@ -102,51 +112,61 @@ with localcontext() as contexto:
         ("fornecedores", "cnpj_fornecedor", "fornecedor"),
     ):
         grupos = []
-        for identificador, grupo in ano.groupby(chave, dropna=False, sort=False):
+        for identificador, grupo in base_2025.groupby(chave, dropna=False, sort=False):
             valor_grupo = sum(grupo["preco_total"], Decimal("0"))
             nomes = list(grupo[nome].dropna().unique())
             grupos.append({
-                "ano": 2025, "secao": "maiores_" + secao,
-                "chave_agrupamento": chave, "identificador_grupo": identificador,
+                "ano": 2025,
+                "secao": "maiores_" + secao,
+                "chave_agrupamento": chave,
+                "identificador_grupo": identificador,
                 "nomes_observados_json": json.dumps(nomes, ensure_ascii=False),
                 "unidades_observadas_json": json.dumps(
                     list(grupo["unidade_fornecimento"].dropna().unique()), ensure_ascii=False
                 ),
                 "criterio_ordenacao": "soma(preco_total)",
-                "valor_criterio": valor_grupo, "valor_total_grupo": valor_grupo,
+                "valor_criterio": valor_grupo,
+                "valor_total_grupo": valor_grupo,
                 "registros_grupo": len(grupo),
                 "participacao_total_2025_pct": valor_grupo / total * 100,
                 "total_2025": total,
                 "observacao": "Agrupamento por identificador, sem padronizar nomes; nulos não excluídos.",
             })
-        if sum(grupo["valor_total_grupo"] for grupo in grupos) != total:
+        # Somar todos os grupos confere se nenhuma parcela ficou fora da análise.
+        total_dos_grupos = 0
+        for grupo in grupos:
+            total_dos_grupos += grupo["valor_total_grupo"]
+        if total_dos_grupos != total:
             raise ValueError(f"Grupos de {secao} não reconciliam com o total.")
-        grupos.sort(key=lambda grupo: grupo["valor_total_grupo"], reverse=True)
+        grupos.sort(key=valor_total_do_grupo, reverse=True)
         for posicao, grupo in enumerate(grupos[:10], start=1):
             grupo["posicao"] = posicao
             linhas.append(grupo)
+        total_dez_maiores = 0
+        for grupo in grupos[:10]:
+            total_dez_maiores += grupo["valor_total_grupo"]
         resumos_terminal.append({
             "ranking": secao,
             "primeiros_tres": grupos[:3],
             "participacao_top10_pct": str(
-                sum(grupo["valor_total_grupo"] for grupo in grupos[:10]) / total * 100
+                total_dez_maiores / total * 100
             ),
         })
 
     # 7. Medir a concentração sem excluir os extremos da base.
     # O restante é apenas uma subtração diagnóstica, não uma nova base ou KPI tratado.
-    maiores_totais = ano.sort_values("preco_total", ascending=False, kind="stable")
+    maiores_totais = base_2025.sort_values("preco_total", ascending=False, kind="stable")
     maior = maiores_totais.iloc[0]["preco_total"]
-    top10 = sum(maiores_totais.head(10)["preco_total"], Decimal("0"))
+    total_top10 = sum(maiores_totais.head(10)["preco_total"], Decimal("0"))
     medidas = {
-        "registros_2025": len(ano),
+        "registros_2025": len(base_2025),
         "total_2025": total,
         "valor_maior_registro": maior,
         "participacao_maior_registro_pct": maior / total * 100,
-        "valor_top10_registros": top10,
-        "participacao_top10_registros_pct": top10 / total * 100,
+        "valor_top10_registros": total_top10,
+        "participacao_top10_registros_pct": total_top10 / total * 100,
         "valor_restante_sem_maior_apenas_diagnostico": total - maior,
-        "registros_reconciliados": len(ano),
+        "registros_reconciliados": len(base_2025),
         "divergencias_acima_tolerancia": divergencias,
         "diferencas_nao_zero": diferencas_nao_zero,
         "maior_diferenca_absoluta": maior_diferenca,
@@ -154,8 +174,11 @@ with localcontext() as contexto:
     }
     for medida, valor in medidas.items():
         linhas.append({
-            "ano": 2025, "secao": "resumo_validacao", "medida": medida,
-            "valor_medida": valor, "total_2025": total,
+            "ano": 2025,
+            "secao": "resumo_validacao",
+            "medida": medida,
+            "valor_medida": valor,
+            "total_2025": total,
             "observacao": "Concentração não comprova erro, sobrepreço ou irregularidade.",
         })
 
@@ -166,7 +189,6 @@ caminho_saida.parent.mkdir(parents=True, exist_ok=True)
 relatorio.to_csv(caminho_saida, sep=";", encoding="utf-8", index=False)
 relido = pd.read_csv(caminho_saida, sep=";", encoding="utf-8", dtype=str, keep_default_na=False)
 esperado = relatorio.to_csv(sep=";", index=False)
-import io
 linhas_esperadas = list(csv.reader(io.StringIO(esperado), delimiter=";"))
 with caminho_saida.open(encoding="utf-8", newline="") as arquivo:
     if list(csv.reader(arquivo, delimiter=";")) != linhas_esperadas:

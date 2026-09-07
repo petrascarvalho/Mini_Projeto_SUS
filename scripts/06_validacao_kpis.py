@@ -65,7 +65,10 @@ with localcontext() as contexto:
             observacao = "2020 a 2026; inclui 2026 parcial"
         else:
             recorte = base.loc[base["ano_arquivo"].eq(periodo)]
-            observacao = "Período parcial" if periodo == 2026 else "Base anual"
+            if periodo == 2026:
+                observacao = "Período parcial"
+            else:
+                observacao = "Base anual"
 
         valor_total = recorte["preco_total"].sum()
         quantidade_total = int(recorte["qtd_itens_comprados"].sum())
@@ -85,7 +88,10 @@ with localcontext() as contexto:
         # detectar perda de precisão ou inclusão de nulos nas contagens distintas.
         if valor_total != sum(recorte["preco_total"], Decimal("0")):
             raise ValueError(f"Soma monetária inconsistente em {periodo}.")
-        if quantidade_total != sum(int(valor) for valor in recorte["qtd_itens_comprados"]):
+        quantidade_conferida = 0
+        for valor in recorte["qtd_itens_comprados"]:
+            quantidade_conferida += int(valor)
+        if quantidade_total != quantidade_conferida:
             raise ValueError(f"Soma de quantidades inconsistente em {periodo}.")
         if instituicoes != len(set(recorte["cnpj_instituicao"].dropna())):
             raise ValueError(f"Contagem de instituições inconsistente em {periodo}.")
@@ -110,10 +116,15 @@ with localcontext() as contexto:
         "valor_total_registrado", "quantidade_total_itens_comprados",
         "numero_registros_compra",
     ):
-        soma_anual = sum(resultado[campo] for resultado in resultados[1:])
+        soma_anual = 0
+        for resultado in resultados[1:]:
+            soma_anual += resultado[campo]
         if soma_anual != resultados[0][campo]:
             raise ValueError(f"Total geral difere da soma anual em {campo}.")
-    if sum(resultado["numero_registros_compra"] for resultado in resultados[1:]) != 342697:
+    registros_anuais = 0
+    for resultado in resultados[1:]:
+        registros_anuais += resultado["numero_registros_compra"]
+    if registros_anuais != 342697:
         raise ValueError("A soma dos registros anuais deve ser 342.697.")
 
 # 7. Gravar somente o relatório, mantendo decimais como texto exato no CSV.
@@ -166,6 +177,14 @@ Resultados: `documentacao/analises/resultados_kpis.csv`, com uma linha total e s
 A validação prévia das chaves identificou 29 CNPJs de instituições associados a mais de um nome, reforçando o uso de CNPJ nas contagens distintas. Nenhuma padronização de nomes foi realizada nesta etapa.
 
 Diferenças de preços não devem ser interpretadas automaticamente como economia, sobrepreço ou irregularidade. Comparações exigem produtos e unidades equivalentes e contexto das aquisições. As 12 inconsistências temporais já sinalizadas na origem permanecem preservadas.
+
+## Observação sobre a concentração de valores em 2025
+
+O valor total registrado em 2025 foi de **R$ 34.930.896.708,47**. Um único registro de penicilamina 250 mg representa **65,32%** desse valor, e os **10 maiores registros representam 79,75%** do total do ano.
+
+A igualdade `preco_total = qtd_itens_comprados × preco_unitario` foi confirmada nos **26.214 registros de 2025**, sem divergências. Essa consistência aritmética não comprova, por si só, a correção documental dos valores. Não há evidência suficiente para classificar esse registro como erro, sobrepreço ou irregularidade.
+
+Essa concentração influencia fortemente os indicadores agregados de 2025. **O preço unitário médio ponderado geral não representa o preço típico de um medicamento.** Comparações de preços devem priorizar produtos equivalentes, com a mesma apresentação, unidade de fornecimento e contexto comparável.
 """
 (pasta_analises / "definicao_kpis.md").write_text(definicoes, encoding="utf-8")
 

@@ -32,8 +32,10 @@ A validação prévia das chaves identificou 29 CNPJs de instituições associad
 
 Diferenças de preços não devem ser interpretadas automaticamente como economia, sobrepreço ou irregularidade. Comparações exigem produtos e unidades equivalentes e contexto das aquisições. As 12 inconsistências temporais já sinalizadas na origem permanecem preservadas.
 
-## Nota de interpretação sobre 2025
+## Observação sobre a concentração de valores em 2025
 
-Um único registro de penicilamina 250 mg representa **65,32% do valor registrado em 2025**, e os **10 maiores registros representam 79,75%**. Os cálculos aritméticos foram validados: em todos os registros de 2025, `preco_total` corresponde a `qtd_itens_comprados × preco_unitario`, sem divergências.
+O valor total registrado em 2025 foi de **R$ 34.930.896.708,47**. Um único registro de penicilamina 250 mg representa **65,32%** desse valor, e os **10 maiores registros representam 79,75%** do total do ano.
 
-Essa concentração não comprova erro ou irregularidade. Por isso, análises de preço devem preferir comparações entre produtos equivalentes, com a mesma apresentação e unidade de fornecimento. **O preço médio ponderado geral não deve ser interpretado como o preço típico de um medicamento.**
+A igualdade `preco_total = qtd_itens_comprados × preco_unitario` foi confirmada nos **26.214 registros de 2025**, sem divergências. Essa consistência aritmética não comprova, por si só, a correção documental dos valores. Não há evidência suficiente para classificar esse registro como erro, sobrepreço ou irregularidade.
+
+Essa concentração influencia fortemente os indicadores agregados de 2025. **O preço unitário médio ponderado geral não representa o preço típico de um medicamento.** Comparações de preços devem priorizar produtos equivalentes, com a mesma apresentação, unidade de fornecimento e contexto comparável.

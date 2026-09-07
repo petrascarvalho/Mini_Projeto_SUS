@@ -45,7 +45,10 @@ entidades = [
 ]
 resultados = []
 for entidade, campo_cnpj, campo_nome in entidades:
-    nomes_por_cnpj = base.groupby(campo_cnpj, dropna=True)[campo_nome].nunique(dropna=True)
+    # Agrupar pelo identificador evita confundir grafias diferentes de uma entidade.
+    grupos_por_cnpj = base.groupby(campo_cnpj, dropna=True)
+    nomes_por_cnpj = grupos_por_cnpj[campo_nome].nunique(dropna=True)
+    cnpjs_com_varios_nomes = nomes_por_cnpj.gt(1)
     resultado = {
         "entidade": entidade,
         "campo_cnpj": campo_cnpj,
@@ -54,7 +57,7 @@ for entidade, campo_cnpj, campo_nome in entidades:
         "nomes_distintos": int(base[campo_nome].nunique(dropna=True)),
         "cnpjs_nulos": int(base[campo_cnpj].isna().sum()),
         "nomes_nulos": int(base[campo_nome].isna().sum()),
-        "cnpjs_com_mais_de_um_nome": int(nomes_por_cnpj.gt(1).sum()),
+        "cnpjs_com_mais_de_um_nome": int(cnpjs_com_varios_nomes.sum()),
     }
     resultados.append(resultado)
 
