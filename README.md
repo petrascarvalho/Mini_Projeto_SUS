@@ -156,6 +156,55 @@ Foram geradas duas versões da base consolidada:
 
 As contagens de 819 registros de 2026 apresentadas na documentação da Sprint 1 referem-se ao arquivo bruto. Os 817 registros finais correspondem à base após a remoção de duas cópias excedentes. A cobertura parcial de 2026 continua sendo uma característica do período e deve ser considerada nas comparações.
 
+## Sprint 3 — Definição das métricas e dos KPIs
+
+A Sprint 3 definiu e validou os seis KPIs utilizando `dados/processados/BPS_20_26_Petras_Ruben_Carvalho.parquet`, com Python global 3.14.4 e Pandas 3.0.2, sem `.venv`. A base não foi alterada e nenhum novo tratamento foi realizado.
+
+### Validação das chaves de contagem
+
+Antes do cálculo dos indicadores, o script [05_validacao_chaves_kpis.py](scripts/05_validacao_chaves_kpis.py) conferiu os identificadores e os nomes de instituições e fornecedores:
+
+| Verificação | Instituições | Fornecedores |
+| --- | ---: | ---: |
+| CNPJs distintos | 831 | 3.502 |
+| Nomes distintos | 664 | 3.294 |
+| CNPJs associados a mais de um nome | 29 | 0 |
+| CNPJs nulos | 0 | 0 |
+| Nomes nulos | 0 | 0 |
+
+Nenhuma das chaves utilizadas possui valores nulos. As contagens consideram os textos como armazenados, sem transformar strings vazias ou espaços em nulos. A existência de 29 CNPJs institucionais associados a mais de um nome reforçou a escolha do CNPJ para contar entidades, evitando que variações de nome sejam contadas como instituições diferentes. Para fornecedores, nenhum CNPJ foi associado a mais de um nome. Os resultados estão em [validacao_chaves_kpis.csv](documentacao/analises/validacao_chaves_kpis.csv).
+
+### Indicadores e agregações
+
+| KPI | Fórmula | Interpretação |
+| --- | --- | --- |
+| Valor total registrado | `SUM(preco_total)` | Soma dos valores financeiros registrados no recorte. |
+| Quantidade total de itens | `SUM(qtd_itens_comprados)` | Soma das quantidades registradas, considerando que produtos e unidades podem ser diferentes. |
+| Número de registros | Contagem das linhas | Quantidade de registros da base, não necessariamente de contratos ou compras distintas. |
+| Instituições compradoras | `COUNT_DISTINCT(cnpj_instituicao)` | CNPJs compradores distintos, excluindo nulos. |
+| Fornecedores | `COUNT_DISTINCT(cnpj_fornecedor)` | CNPJs fornecedores distintos, excluindo nulos. |
+| Preço unitário médio ponderado | `SUM(preco_total) / SUM(qtd_itens_comprados)` | Razão entre valor e quantidade totais, recalculada em cada recorte. |
+
+`preco_unitario` **não é somado**, pois a soma de preços unitários não representa gasto total nem preço médio. A média simples de `preco_unitario` também não é utilizada como KPI global. A mediana poderá ser utilizada posteriormente para comparar preços de produtos equivalentes, com a mesma apresentação e unidade de fornecimento.
+
+O preço médio ponderado geral mistura produtos e unidades diferentes e **não deve ser interpretado como o preço típico de um medicamento**. As contagens distintas anuais de CNPJs não devem ser somadas para obter o total geral, pois uma entidade pode aparecer em vários anos.
+
+### Validações dos KPIs
+
+O script [06_validacao_kpis.py](scripts/06_validacao_kpis.py) calculou e validou todos os seis KPIs no total geral e separadamente para cada ano de 2020 a 2026. Foram confirmados totais financeiros e quantidades positivos, contagens distintas sem inclusão de nulos e **nenhuma divisão por zero**. A soma dos registros anuais é **342.697**, igual à contagem da base consolidada; as somas anuais de valores e quantidades também coincidem com o total geral.
+
+**2026 é um período parcial**, identificado nos resultados, e não deve ser comparado diretamente com anos completos como se tivesse a mesma cobertura. O total geral também inclui esse período parcial.
+
+As fórmulas, justificativas e cuidados de interpretação estão em [definicao_kpis.md](documentacao/analises/definicao_kpis.md). Os valores calculados para o total e por ano estão em [resultados_kpis.csv](documentacao/analises/resultados_kpis.csv).
+
+### Observação sobre a concentração em 2025
+
+O valor total registrado em 2025 foi de **R$ 34.930.896.708,47**. Um único registro de penicilamina 250 mg representa **65,32%** desse total, e os **10 maiores registros representam 79,75%**. A validação complementar encontrou **zero divergências** entre `qtd_itens_comprados × preco_unitario` e `preco_total` nos registros do ano.
+
+Essa concentração **não comprova erro, sobrepreço ou irregularidade**. A consistência aritmética também não comprova, por si só, a correção documental dos valores registrados. A concentração afeta fortemente os indicadores agregados e exige cautela na interpretação; análises de preço devem preferir produtos equivalentes, com a mesma apresentação e unidade de fornecimento.
+
+O diagnóstico é reproduzido pelo script [07_validacao_pico_2025.py](scripts/07_validacao_pico_2025.py), com rankings e verificações em [validacao_pico_2025.csv](documentacao/analises/validacao_pico_2025.csv). Nenhum registro foi removido ou corrigido nessa análise.
+
 ## Status do projeto
 
 **Sprint 1 — Entendimento do problema e dos dados: concluída.**
@@ -166,4 +215,6 @@ Foram concluídas a obtenção e preservação dos sete arquivos anuais, a valid
 
 Foram concluídos o diagnóstico de qualidade, o tratamento auditável dos sete anos e a consolidação em CSV e Parquet, preservando os arquivos brutos. A documentação da Sprint 1 permanece como registro da situação anterior ao tratamento.
 
-Não foram definidos KPIs finais. Os KPIs da Sprint 3, o dashboard, as descobertas, recomendações, limitações e instruções de reprodução serão desenvolvidos e documentados nas respectivas Sprints, sem antecipar essas entregas.
+**Sprint 3 — Definição das métricas e dos KPIs: concluída.**
+
+Foram concluídas a validação das chaves, a definição e validação dos seis KPIs no total e por ano e a análise complementar da concentração de valores em 2025. As bases foram preservadas, e os cuidados de interpretação foram documentados.
