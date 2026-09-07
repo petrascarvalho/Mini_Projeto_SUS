@@ -102,10 +102,68 @@ As [oito perguntas de negócio](documentacao/analises/perguntas_negocio.md) orie
 
 Diferenças de preços **não devem ser interpretadas automaticamente como economia, sobrepreço ou irregularidade**. Será necessário avaliar a comparabilidade dos produtos, apresentações, períodos e condições das aquisições.
 
+## Sprint 2 — Preparação e concatenação das bases
+
+A Sprint 2 foi executada com Python global 3.14.4 e Pandas 3.0.2, sem criar ou utilizar `.venv`. O trabalho foi dividido em diagnóstico, tratamento anual e consolidação. Os arquivos brutos foram preservados, com conferência de hashes SHA-256; os tratamentos foram aplicados somente às cópias destinadas a `dados/processados`.
+
+### Diagnóstico antes do tratamento
+
+O script [02_diagnostico_qualidade.py](scripts/02_diagnostico_qualidade.py) investigou nulos, strings vazias, espaços nos textos, duplicados, categorias, formatos numéricos, datas e a consistência entre quantidade e preços. As evidências foram registradas nos relatórios `diagnostico_*.csv` e em [resumo_qualidade_sprint2.csv](documentacao/analises/resumo_qualidade_sprint2.csv), em `documentacao/analises`.
+
+Esse diagnóstico orientou as regras de tratamento. Os nulos foram investigados e não preenchidos indiscriminadamente: ausência de informação não equivale a zero nem autoriza inferir um valor.
+
+### Tratamento anual e rastreabilidade
+
+O script [03_tratamento_bases.py](scripts/03_tratamento_bases.py) preparou cada ano separadamente, mantendo os 25 nomes originais das colunas:
+
+- `compra` e `insercao` foram convertidas para datas, preservando as ausências de `insercao` como nulos.
+- `ano_compra` e `qtd_itens_comprados` foram convertidos para inteiros; `capacidade`, `preco_unitario` e `preco_total`, para tipos decimais. Quando ausente, `capacidade` permaneceu nula, sem preenchimento com zero.
+- Os identificadores CNPJ da instituição, do fornecedor e do fabricante, `codigo_br` e `anvisa` foram mantidos como texto, preservando zeros à esquerda.
+- Foram removidos **19 duplicados exatos excedentes**, identificados nas 25 colunas originais antes das conversões, preservando a primeira ocorrência. As cópias removidas, seus valores originais, o ano do arquivo e a posição de origem foram mantidos em [registros_duplicados_removidos.csv](documentacao/analises/registros_duplicados_removidos.csv) para auditoria.
+- Os **43 registros de 2020 com `esfera = "0"`** foram classificados como `NAO_INFORMADO`, sem atribuir uma esfera administrativa não comprovada. O valor anterior foi preservado em `esfera_original`, coluna presente em todos os anos.
+- `DOSE` e `DOSES` não foram unificados por falta de evidência documental suficiente. Os demais valores categóricos e nomes de instituições, fornecedores, fabricantes e produtos foram preservados.
+- Foi criada `ano_arquivo` para identificar o ano do arquivo de origem, e `ano_parcial`, verdadeira somente para 2026. Com `esfera_original`, essas adições elevaram a estrutura para **28 colunas**.
+
+As **12 inconsistências temporais da origem em que `insercao < compra` foram preservadas e sinalizadas**: 1 em 2023 e 11 em 2024. Não houve correção dessas datas sem uma regra fundamentada; essas ocorrências não representam falhas de conversão.
+
+O campo `preco_total` foi validado contra `qtd_itens_comprados × preco_unitario`, usando decimais exatos e tolerância de **R$ 0,01**, com **zero divergências**. Também não foram encontradas inconsistências entre `ano_compra` e `ano_arquivo` após o tratamento.
+
+Os sete arquivos tratados anuais foram armazenados como `dados/processados/por_ano/ANO_tratado.parquet`. O formato Parquet preserva os tipos de dados e os nulos para as análises locais. As contagens antes e depois e as validações constam em [resumo_tratamento_sprint2.csv](documentacao/analises/resumo_tratamento_sprint2.csv).
+
+### Consolidação e distribuição final
+
+O script [04_consolidacao_bps.py](scripts/04_consolidacao_bps.py) conferiu os nomes, a ordem e os tipos das 28 colunas dos sete Parquets e concatenou os registros verticalmente com Pandas. Nenhum novo tratamento foi realizado nessa etapa: nulos, categorias, `ano_arquivo`, `ano_parcial` e `esfera_original` foram preservados.
+
+A consolidação resultou em **342.697 registros e 28 colunas**, distribuídos da seguinte forma:
+
+| Ano | Registros finais |
+| --- | ---: |
+| 2020 | 84.819 |
+| 2021 | 83.622 |
+| 2022 | 88.991 |
+| 2023 | 31.992 |
+| 2024 | 26.242 |
+| 2025 | 26.214 |
+| 2026 | 817 |
+| **Total** | **342.697** |
+
+A conferência após a concatenação encontrou **zero duplicados exatos nas 28 colunas**, zero inconsistências de ano e zero divergências na relação de preços com a mesma tolerância de R$ 0,01. Foram confirmados os 43 registros com `esfera = "NAO_INFORMADO"` e `esfera_original = "0"`, além de `ano_parcial = True` somente nos 817 registros de 2026. O detalhamento está em [resumo_consolidacao_sprint2.csv](documentacao/analises/resumo_consolidacao_sprint2.csv).
+
+Foram geradas duas versões da base consolidada:
+
+- `dados/processados/BPS_20_26_Petras_Ruben_Carvalho.csv`: CSV final com separador `;`, encoding UTF-8 e sem índice do Pandas.
+- `dados/processados/BPS_20_26_Petras_Ruben_Carvalho.parquet`: versão mantida para preservar os tipos de dados durante as análises locais. O CSV é uma representação textual e não armazena o esquema de tipos do Parquet.
+
+As contagens de 819 registros de 2026 apresentadas na documentação da Sprint 1 referem-se ao arquivo bruto. Os 817 registros finais correspondem à base após a remoção de duas cópias excedentes. A cobertura parcial de 2026 continua sendo uma característica do período e deve ser considerada nas comparações.
+
 ## Status do projeto
 
 **Sprint 1 — Entendimento do problema e dos dados: concluída.**
 
 Foram concluídas a obtenção e preservação dos sete arquivos anuais, a validação técnica dos ZIPs, a inspeção estrutural, a análise semântica e temporal e a documentação das perguntas de negócio.
 
-As bases permanecem sem tratamento e sem concatenação. Não foram definidos KPIs finais. Tratamentos, KPIs, dashboard, descobertas, recomendações, limitações e instruções de reprodução serão desenvolvidos e documentados nas respectivas Sprints, sem antecipar essas entregas.
+**Sprint 2 — Preparação e concatenação das bases: concluída.**
+
+Foram concluídos o diagnóstico de qualidade, o tratamento auditável dos sete anos e a consolidação em CSV e Parquet, preservando os arquivos brutos. A documentação da Sprint 1 permanece como registro da situação anterior ao tratamento.
+
+Não foram definidos KPIs finais. Os KPIs da Sprint 3, o dashboard, as descobertas, recomendações, limitações e instruções de reprodução serão desenvolvidos e documentados nas respectivas Sprints, sem antecipar essas entregas.
