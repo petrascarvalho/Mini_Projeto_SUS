@@ -1,0 +1,8 @@
+ano,nome_zip,tamanho_zip_bytes,sha256,integridade_zip,nome_csv_interno,tamanho_descompactado_bytes,caminho_extracao
+2020,2020_csv.zip,4774993,0a4c4f6a63cc9ab83c33da684c94c9a1ff7a918b7bb8f4eb82a299b2ed6ff3b8,OK - CRC32 de todas as entradas validado,2020.csv,37214661,C:\Mini_Projeto_SUS\dados\brutos\2020\2020.csv
+2021,2021_csv.zip,4806903,2e3c4d463a27bfa340da59b056bba37e342e987cf4fb7a4348d0f95aa30851f8,OK - CRC32 de todas as entradas validado,2021.csv,36906491,C:\Mini_Projeto_SUS\dados\brutos\2021\2021.csv
+2022,2022_csv.zip,5160238,802c31c907a4073fdf15e4849b093811acb4c16922a638e05d939f908b2d212e,OK - CRC32 de todas as entradas validado,2022.csv,39291547,C:\Mini_Projeto_SUS\dados\brutos\2022\2022.csv
+2023,2023_csv.zip,1795846,41600d8068084f6d85f6a4e3d5401f4e57cb0cc36ba5153dfd96fb133d5383f8,OK - CRC32 de todas as entradas validado,2023.csv,14032084,C:\Mini_Projeto_SUS\dados\brutos\2023\2023.csv
+2024,2024_csv.zip,1496633,4aa4f73880cb3048f40e833fd873f522ceb62cf81e97f786eca3a33f2e79c387,OK - CRC32 de todas as entradas validado,2024.csv,11285398,C:\Mini_Projeto_SUS\dados\brutos\2024\2024.csv
+2025,2025_csv.zip,1575327,dcbf1bc4c7a21141ff9d10ee5421c1a09c0bec297b3f2c4a54639a0f5ab06010,OK - CRC32 de todas as entradas validado,2025.csv,11583114,C:\Mini_Projeto_SUS\dados\brutos\2025\2025.csv
+2026,2026_csv.zip,50278,a7a1d167ac86a36728a59356d43f1a7d61ee0f04ce9f71f579ca877618b4c5ee,OK - CRC32 de todas as entradas validado,2026.csv,363810,C:\Mini_Projeto_SUS\dados\brutos\2026\2026.csv
