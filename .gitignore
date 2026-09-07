@@ -23,6 +23,6 @@ dados/brutos/*.zip
 dados/brutos/**/*.csv
 
 # Bases processadas geradas pelo projeto
-dados/processados/*.csv
-dados/processados/*.xlsx
-dados/processados/*.parquet
+dados/processados/**/*.csv
+dados/processados/**/*.xlsx
+dados/processados/**/*.parquet
