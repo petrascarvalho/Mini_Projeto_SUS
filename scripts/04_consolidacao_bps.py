@@ -85,7 +85,9 @@ def main():
         for campo in ("ano_arquivo", "ano_parcial", "esfera_original"):
             if campo not in base_anual.columns:
                 raise ValueError(f"Campo obrigatório ausente: {campo}.")
-        if base_anual["ano_arquivo"].isna().any() or not base_anual["ano_arquivo"].eq(ano).all():
+        origem_ausente = base_anual["ano_arquivo"].isna().any()
+        origem_correta = base_anual["ano_arquivo"].eq(ano).all()
+        if origem_ausente or not origem_correta:
             raise ValueError(f"Origem incorreta em {ano}.")
         bases_anuais.append(base_anual)
 
@@ -169,6 +171,11 @@ def main():
     resumos = []
     for ano in REGISTROS_ESPERADOS:
         registros_do_ano = consolidada["ano_arquivo"].eq(ano)
+        # Calcular separadamente as contagens facilita conferir o resumo do ano.
+        esferas_do_ano = consolidada.loc[registros_do_ano, "esfera"]
+        quantidade_nao_informado = int(esferas_do_ano.eq("NAO_INFORMADO").sum())
+        quantidade_esfera_convertida = int(esfera_convertida.loc[registros_do_ano].sum())
+        quantidade_parciais = int(consolidada.loc[registros_do_ano, "ano_parcial"].sum())
         resumos.append({
             "ano": ano,
             "registros_por_ano": int(registros_do_ano.sum()),
@@ -178,15 +185,9 @@ def main():
             "total_duplicados_consolidado": total_duplicados,
             "inconsistencias_ano_compra": int(anos_inconsistentes.loc[registros_do_ano].sum()),
             "divergencias_preco_total": int(divergencias_preco.loc[registros_do_ano].sum()),
-            "quantidade_nao_informado": int(
-                consolidada.loc[registros_do_ano, "esfera"].eq("NAO_INFORMADO").sum()
-            ),
-            "quantidade_esfera_original_zero_convertida": int(
-                esfera_convertida.loc[registros_do_ano].sum()
-            ),
-            "registros_ano_parcial_true": int(
-                consolidada.loc[registros_do_ano, "ano_parcial"].sum()
-            ),
+            "quantidade_nao_informado": quantidade_nao_informado,
+            "quantidade_esfera_original_zero_convertida": quantidade_esfera_convertida,
+            "registros_ano_parcial_true": quantidade_parciais,
         })
     resumo = pd.DataFrame(resumos)
 
