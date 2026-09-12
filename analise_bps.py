@@ -84,9 +84,16 @@ colunas_texto = [
     "fornecedor",
     "fabricante",
 ]
-# Manter os textos e remover somente espaços nas extremidades.
+# Remover espaços nas extremidades e reduzir espaços consecutivos.
 for coluna in colunas_texto:
-    base[coluna] = base[coluna].astype("string").str.strip()
+    base[coluna] = (
+        base[coluna].astype("string").str.strip()
+        .str.replace(r"\s+", " ", regex=True)
+    )
+
+# Padronizar espaços ao redor de hífens somente nos nomes abaixo.
+for coluna in ["nome_instituicao", "fornecedor", "fabricante"]:
+    base[coluna] = base[coluna].str.replace(r"\s*-\s*", " - ", regex=True)
 
 # Manter quantidades inteiras e preços sem arredondamento.
 base["qtd_itens_comprados"] = base["qtd_itens_comprados"].astype("int64")
@@ -113,6 +120,9 @@ print("\nResumo final:")
 print(f"Total original das sete bases, antes do tratamento: {registros_originais}")
 print(f"Duplicados removidos: {duplicados_removidos}")
 print(f"Total final: {numero_registros}")
+print(f"Nomes distintos de instituições: {base['nome_instituicao'].nunique()}")
+print(f"Nomes distintos de fornecedores: {base['fornecedor'].nunique()}")
+print(f"Nomes distintos de fabricantes: {base['fabricante'].nunique()}")
 print(f"Colunas finais: {base.shape[1]}")
 print("Nomes das colunas:")
 print(base.columns.tolist())
