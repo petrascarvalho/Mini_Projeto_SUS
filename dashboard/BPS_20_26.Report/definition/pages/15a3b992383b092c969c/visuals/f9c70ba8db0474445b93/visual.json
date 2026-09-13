@@ -1,0 +1,874 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "f9c70ba8db0474445b93",
+  "position": {
+    "x": 312,
+    "y": 672,
+    "z": 7,
+    "height": 324,
+    "width": 1576,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Produto"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Nome Produto",
+              "nativeQueryRef": "Produto"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Código BR"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Codigo_br",
+              "nativeQueryRef": "Código BR"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Apresentação / Capacidade"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Unidade_Fornecimento_Capacidade",
+              "nativeQueryRef": "Apresentação / Capacidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Fornecedor"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Fornecedor",
+              "nativeQueryRef": "Fornecedor"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Fabricante"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Fabricante",
+              "nativeQueryRef": "Fabricante"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Instituicao Identificada"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Instituicao Identificada",
+              "nativeQueryRef": "Instituicao Identificada"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Estado"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Estado",
+              "nativeQueryRef": "Estado"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Data da Compra"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Data_Compra",
+              "nativeQueryRef": "Data da Compra"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Modalidade de Compra"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Modalidade_Compra",
+              "nativeQueryRef": "Modalidade de Compra"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Quantidade"
+                }
+              },
+              "queryRef": "Sum(BPS_20_26_Petras_Ruben_Carvalho.Quantidade)",
+              "nativeQueryRef": "Quantidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Preço Unitário"
+                }
+              },
+              "queryRef": "Sum(BPS_20_26_Petras_Ruben_Carvalho.Preco_Unitario)",
+              "nativeQueryRef": "Preço Unitário"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Valor Total"
+                }
+              },
+              "queryRef": "Sum(BPS_20_26_Petras_Ruben_Carvalho.Valor_Total)",
+              "nativeQueryRef": "Valor Total"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                  }
+                },
+                "Property": "Fabricante"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D9E1E8'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "20L"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "20L"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "20L"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "20L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Detalhamento das Compras'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "16L"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "spacing": [
+        {
+          "properties": {
+            "customizeSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
+              "expr": {
+                "Literal": {
+                  "Value": "12L"
+                }
+              }
+            },
+            "spaceAbovePlotArea": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "spaceAboveSubtitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "spaceAboveDivider": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D9E1E8'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6573'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12L"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#005AA9'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DCEBFA'"
+                    }
+                  }
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11L"
+                }
+              }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F4F7FA'"
+                    }
+                  }
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D9E1E8'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridHorizontalWeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "1L"
+                }
+              }
+            },
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "7L"
+                }
+              }
+            },
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b6a90a16d3806473c505",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Produto"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "7b5d6cbd0c3176304940",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Apresentação / Capacidade"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ac5335f2242ac3e08e93",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Fornecedor"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "71252792a4e00946589b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Fabricante"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e0ea95584004d0a35e85",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Instituicao Identificada"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c11827fdd5cc1cc9a8a3",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Estado"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "96c6646560e0ad02dd84",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Modalidade de Compra"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ca52065ce620bd3881be",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Código BR"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "40a10f03819402a3d1c7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Data da Compra"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "b766c78637c8250001ec",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Quantidade"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "91bd1dde89690aa4ce0c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Preço Unitário"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "43c3c101c2002850d102",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Valor Total"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

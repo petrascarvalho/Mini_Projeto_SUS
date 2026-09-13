@@ -1,8 +1,0 @@
-﻿ano,registros,duplicados_exatos_excedentes,percentual_duplicados_excedentes,registros_em_grupos_duplicados,quantidade_grupos_duplicados,exemplos_registros_excedentes_json,criterio
-2020,84819,0,0.0,0,0,[],"Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."
-2021,83622,0,0.0,0,0,[],"Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."
-2022,88991,0,0.0,0,0,[],"Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."
-2023,31992,0,0.0,0,0,[],"Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."
-2024,26258,16,0.060934,32,16,"[1367,1401,5988,5991,7397,7414,7463,11642,12977,13338]","Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."
-2025,26215,1,0.003815,2,1,[22953],"Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."
-2026,819,2,0.2442,4,2,"[434,436]","Igualdade de todos os campos CSV decodificados, sem normalizar; excedentes além da primeira ocorrência. Registro numerado a partir de 1 após o cabeçalho; nenhuma linha removida."

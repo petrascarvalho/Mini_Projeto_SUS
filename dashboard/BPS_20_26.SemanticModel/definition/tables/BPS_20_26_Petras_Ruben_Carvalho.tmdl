@@ -1,0 +1,252 @@
+table BPS_20_26_Petras_Ruben_Carvalho
+	lineageTag: 5ff1e47e-b90d-4477-bf95-5d54ef762d14
+
+	measure 'Número de Registros' = COUNTROWS('BPS_20_26_Petras_Ruben_Carvalho')
+		formatString: 0.000
+		lineageTag: 345ce533-ec1a-4f97-95d1-196990760e70
+
+	measure 'Valor Total Registrado' = SUM('BPS_20_26_Petras_Ruben_Carvalho'[Valor Total])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: ac720a6d-b200-436e-a24d-03bce3dc53e1
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Quantidade Total' = SUM('BPS_20_26_Petras_Ruben_Carvalho'[Quantidade])
+		formatString: 0.000
+		lineageTag: 7833ae42-20a5-4588-a640-3a2b18608b05
+
+	measure 'Instituicoes Compradoras' = DISTINCTCOUNT('BPS_20_26_Petras_Ruben_Carvalho'[CNPJ Instituição])
+		formatString: 0
+		lineageTag: 426e9107-15f8-488c-8acd-8dee5a3ea7c5
+
+	measure 'Fornecedores Distintos' = DISTINCTCOUNT('BPS_20_26_Petras_Ruben_Carvalho'[CNPJ Fornecedor])
+		formatString: 0
+		lineageTag: aab6a361-7b9e-40a1-bcb7-c706e6f28738
+
+	measure 'Preço Médio Ponderado' = [Valor Total Registrado] / [Quantidade Total]
+		formatString: "R$"\ #,0.000;-"R$"\ #,0.000;"R$"\ #,0.000
+		lineageTag: 88472ff5-35d1-407a-be00-3667270afde0
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Fornecedores =
+			
+			DISTINCTCOUNT(
+			    'BPS_20_26_Petras_Ruben_Carvalho'[CNPJ Fornecedor]
+			)
+		formatString: 0.000
+		lineageTag: e919ee13-ddc3-4d44-b053-efc28d480443
+
+	measure 'Preço Unitário Mínimo' =
+			
+			CALCULATE(
+			    MIN('BPS_20_26_Petras_Ruben_Carvalho'[Preço Unitário]),
+			    'BPS_20_26_Petras_Ruben_Carvalho'[Preço Unitário] > 0
+			)
+		formatString: "R$"\ #,0.0000;-"R$"\ #,0.0000;"R$"\ #,0.0000
+		lineageTag: 201d20a8-a864-46ed-8674-6b5a0ba2dcc5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Preço Unitário Máximo' =
+			
+			MAX(
+			    'BPS_20_26_Petras_Ruben_Carvalho'[Preço Unitário]
+			)
+		formatString: "R$"\ #,0.0000;-"R$"\ #,0.0000;"R$"\ #,0.0000
+		lineageTag: 841b0580-ff53-4eb6-819d-41aef846b8aa
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Variação de Preço' =
+			
+			[Preço Unitário Máximo] - [Preço Unitário Mínimo]
+		formatString: "R$"\ #,0.0000;-"R$"\ #,0.0000;"R$"\ #,0.0000
+		lineageTag: 7df4aa22-6e5f-4454-b6f7-dd9ecb576359
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 45d3e2c8-b271-4183-b9b0-abfa4088e0d0
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = User
+
+	column 'Data da Compra'
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: db7fe466-54ed-48bd-a487-30c454d05cab
+		summarizeBy: none
+		sourceColumn: Data da Compra
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Instituição
+		dataType: string
+		lineageTag: 313b5d69-66d7-42e9-ba92-acc5d5d36579
+		summarizeBy: none
+		sourceColumn: Instituição
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ Instituição'
+		dataType: string
+		lineageTag: b443205c-9b14-48d9-b79f-679352a15374
+		summarizeBy: none
+		sourceColumn: CNPJ Instituição
+
+		annotation SummarizationSetBy = Automatic
+
+	column Municipio
+		dataType: string
+		lineageTag: c7e0b5e9-f004-4bae-aa95-ea83ca22328a
+		summarizeBy: none
+		sourceColumn: Municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: 1adc3989-c775-4097-87c4-d31e4a0f50b7
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Código BR'
+		dataType: string
+		lineageTag: 0d922532-09b7-446c-b060-efa814b4b730
+		summarizeBy: none
+		sourceColumn: Código BR
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Descrição Técnica do Produto'
+		dataType: string
+		lineageTag: 268fb9ae-ffdc-415f-9bc2-c2264f9255f2
+		summarizeBy: none
+		sourceColumn: Descrição Técnica do Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unidade de Fornecimento'
+		dataType: string
+		lineageTag: 73a31ab5-51ae-443d-a301-9215d62637b8
+		summarizeBy: none
+		sourceColumn: Unidade de Fornecimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Apresentação / Capacidade'
+		dataType: string
+		lineageTag: b52716cc-0d6f-4ba7-a90a-caf74b45ce37
+		summarizeBy: none
+		sourceColumn: Apresentação / Capacidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Modalidade de Compra'
+		dataType: string
+		lineageTag: d5903ac6-6249-458f-9229-f0ab3d5d025c
+		summarizeBy: none
+		sourceColumn: Modalidade de Compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ Fornecedor'
+		dataType: string
+		lineageTag: fc9ef6b2-4406-40ef-803d-86b2403fb3f4
+		summarizeBy: none
+		sourceColumn: CNPJ Fornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fornecedor
+		dataType: string
+		lineageTag: 9a14b466-a633-456f-aef2-ab3736e26afa
+		summarizeBy: none
+		sourceColumn: Fornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fabricante
+		dataType: string
+		lineageTag: 667f6fee-e155-422c-a89a-776ef7d960ac
+		summarizeBy: none
+		sourceColumn: Fabricante
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantidade
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bf95ae8-1e88-4aa2-aca7-8403c2a9cd9a
+		summarizeBy: sum
+		sourceColumn: Quantidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Preço Unitário'
+		dataType: double
+		lineageTag: df110d0e-8389-4332-becd-102f6a12be3f
+		summarizeBy: sum
+		sourceColumn: Preço Unitário
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Valor Total'
+		dataType: double
+		lineageTag: b8dc201a-bbcc-40d9-9f36-b9f838d44425
+		summarizeBy: sum
+		sourceColumn: Valor Total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Instituicao Identificada' =
+			
+			'BPS_20_26_Petras_Ruben_Carvalho'[Instituição]
+			    & " | "
+			    & 'BPS_20_26_Petras_Ruben_Carvalho'[CNPJ Instituição]
+		lineageTag: a7dcaa23-4c17-4ccf-b5ba-4f7bb77b7055
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto
+		dataType: string
+		lineageTag: 2264287a-fbbe-466d-a88c-866385805194
+		summarizeBy: none
+		sourceColumn: Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	partition BPS_20_26_Petras_Ruben_Carvalho = m
+		mode: import
+		source =
+				let
+				  Origem = Csv.Document(File.Contents("C:\Mini_Projeto_SUS\dados\processados\BPS_20_26_Petras_Ruben_Carvalho.csv"), [Delimiter = ";", Columns = 18, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+				  #"Cabeçalhos promovidos" = Table.PromoteHeaders(Origem, [PromoteAllScalars = true]),
+				  #"Tipo de coluna alterado" = Table.TransformColumnTypes(#"Cabeçalhos promovidos", {{"ano_compra", Int64.Type}, {"compra", type date}, {"nome_instituicao", type text}, {"cnpj_instituicao", type text}, {"municipio_instituicao", type text}, {"uf", type text}, {"codigo_br", Int64.Type}, {"descricao_catmat", type text}, {"unidade_fornecimento", type text}, {"unidade_fornecimento_capacidade", type text}, {"modalidade_compra", type text}, {"cnpj_fornecedor", type text}, {"fornecedor", type text}, {"fabricante", type text}, {"qtd_itens_comprados", Int64.Type}, {"preco_unitario", type number}, {"preco_total", type number}}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Tipo de coluna alterado",{{"ano_compra", "Ano"}, {"compra", "Data_Compra"}, {"nome_instituicao", "Instituicao"}, {"cnpj_instituicao", "Cnpj_Instituicao"}, {"municipio_instituicao", "Municipio"}, {"uf", "Estado"}, {"codigo_br", "Codigo_br"}, {"descricao_catmat", "Produto"}, {"unidade_fornecimento", "Unidade_Fornecimento"}, {"unidade_fornecimento_capacidade", "Unidade_Fornecimento_Capacidade"}, {"modalidade_compra", "Modalidade_Compra"}, {"cnpj_fornecedor", "Cnpj_Fornecedor"}, {"fornecedor", "Fornecedor"}, {"fabricante", "Fabricante"}, {"qtd_itens_comprados", "Quantidade"}, {"preco_unitario", "Preco_Unitario"}, {"preco_total", "Valor_Total"}}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Colunas Renomeadas",{{"Quantidade", Int64.Type}, {"Preco_Unitario", type number}}),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Tipo Alterado",{{"Nome_Produto", "Produto"}, {"Codigo_br", "Código BR"}, {"Unidade_Fornecimento_Capacidade", "Apresentação / Capacidade"}, {"Modalidade_Compra", "Modalidade de Compra"}, {"Data_Compra", "Data da Compra"}, {"Produto", "Descrição Técnica do Produto"}, {"Cnpj_Fornecedor", "CNPJ Fornecedor"}, {"Cnpj_Instituicao", "CNPJ Instituição"}, {"Instituicao", "Instituição"}, {"Preco_Unitario", "Preço Unitário"}, {"Valor_Total", "Valor Total"}, {"Unidade_Fornecimento", "Unidade de Fornecimento"}})
+				in
+				  #"Colunas Renomeadas1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+
