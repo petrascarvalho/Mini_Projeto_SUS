@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "b5f183f33c6a83b58525",
+  "position": {
+    "x": 1104,
+    "y": 160,
+    "z": 3000,
+    "height": 192,
+    "width": 240,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Instituicoes Compradoras"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Instituicoes Compradoras",
+              "nativeQueryRef": "Instituicoes Compradoras"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                  }
+                },
+                "Property": "Instituicoes Compradoras"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "d720d11186420080bca5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Instituicoes Compradoras"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

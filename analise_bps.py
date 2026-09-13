@@ -1,6 +1,7 @@
 # 1. Importação das bibliotecas
 import pandas as pd
 from pathlib import Path
+from html import unescape
 
 # 2. Definição das pastas
 raiz = Path(__file__).resolve().parent
@@ -100,6 +101,63 @@ base["qtd_itens_comprados"] = base["qtd_itens_comprados"].astype("int64")
 for coluna in ["preco_unitario", "preco_total"]:
     base[coluna] = pd.to_numeric(base[coluna])
 
+# Diagnosticar HTML sem modificar a descrição técnica original.
+com_tags = base["descricao_catmat"].str.contains("<", regex=False, na=False)
+com_entidades = base["descricao_catmat"].str.contains("&#", regex=False, na=False)
+afetados_html = com_tags | com_entidades
+print("\nDiagnóstico de HTML em descricao_catmat:")
+print(f"Registros contendo '<': {com_tags.sum()}")
+print(f"Registros contendo '&#': {com_entidades.sum()}")
+print(f"Registros afetados por pelo menos um dos padrões: {afetados_html.sum()}")
+
+# Criar o nome para exibição, preservando descricao_catmat.
+base.insert(base.columns.get_loc("descricao_catmat") + 1, "Nome_Produto",
+            base["descricao_catmat"].copy())
+base["Nome_Produto"] = (
+    base["Nome_Produto"].map(unescape, na_action="ignore").astype("string")
+)
+
+# Se a descrição começar com HTML, preservar o texto dentro das tags.
+inicia_com_tag = base["Nome_Produto"].str.match(r"^\s*<", na=False)
+base.loc[inicia_com_tag, "Nome_Produto"] = (
+    base.loc[inicia_com_tag, "Nome_Produto"]
+    .str.replace(r"<[^>]+>", " ", regex=True)
+)
+
+# Nos demais casos, manter somente o texto anterior à primeira tag.
+base.loc[~inicia_com_tag, "Nome_Produto"] = (
+    base.loc[~inicia_com_tag, "Nome_Produto"]
+    .str.replace(r"<.*$", "", regex=True)
+)
+
+# Finalizar a limpeza e manter somente o texto antes da primeira vírgula.
+base["Nome_Produto"] = (
+    base["Nome_Produto"]
+    .str.replace(r"<[^>]+>", " ", regex=True)
+    .str.replace(r"\s+", " ", regex=True)
+    .str.strip()
+    .str.split(",", n=1).str[0]
+    .str.strip()
+)
+base["Nome_Produto"] = base["Nome_Produto"].astype("string")
+
+print("\nValidação de Nome_Produto:")
+print(f"Valores distintos: {base['Nome_Produto'].nunique()}")
+print(f"Valores nulos: {base['Nome_Produto'].isna().sum()}")
+print(f"Valores vazios: {base['Nome_Produto'].eq('').sum()}")
+tags_restantes = base["Nome_Produto"].str.contains("<", regex=False, na=False).sum()
+entidades_restantes = base["Nome_Produto"].str.contains("&#", regex=False, na=False).sum()
+print(f"Valores ainda contendo '<': {tags_restantes}")
+print(f"Valores ainda contendo '&#': {entidades_restantes}")
+if tags_restantes > 0 or entidades_restantes > 0:
+    raise ValueError("Limpeza de Nome_Produto incompleta. Exportação interrompida.")
+
+print("\nExemplos corrigidos:")
+exemplos = base.loc[afetados_html, ["descricao_catmat", "Nome_Produto"]]
+for exemplo in exemplos.drop_duplicates().head(3).itertuples(index=False):
+    print(f"Original: {exemplo.descricao_catmat}")
+    print(f"Nome_Produto: {exemplo.Nome_Produto}\n")
+
 # 8. Verificação dos valores nulos
 # Contar as ausências sem preencher campos ou excluir linhas.
 nulos_por_coluna = base.isnull().sum()
@@ -137,6 +195,18 @@ print(f"Instituições: {instituicoes}")
 print(f"Fornecedores: {fornecedores}")
 print(f"Preço médio ponderado: {preco_medio_ponderado:.10f}")
 
+# Conferir os KPIs na precisão informada antes de gravar o arquivo.
+if (
+    numero_registros != 342697
+    or f"{valor_total:.4f}" != "78557477974.0877"
+    or quantidade_total != 57127143721
+    or instituicoes != 831
+    or fornecedores != 3502
+    or f"{preco_medio_ponderado:.10f}" != "1.3751340056"
+):
+    raise ValueError("KPIs diferentes dos esperados. Exportação interrompida.")
+print("KPIs conferidos: todos permanecem iguais aos valores esperados.")
+
 # 11. Exportação do CSV consolidado para o Power BI
 pasta_processados.mkdir(parents=True, exist_ok=True)
 # Gravar uma única tabela, com vírgula decimal e sem o índice.
@@ -149,9 +219,21 @@ print(f"Tamanho do CSV: {arquivo_saida.stat().st_size} bytes")
 
 # 12. Releitura simples do CSV gerado
 # Conferir a estrutura sem criar outro arquivo.
-base_conferida = pd.read_csv(arquivo_saida, sep=";", encoding="utf-8-sig", dtype="string")
+base_conferida = pd.read_csv(
+    arquivo_saida, sep=";", encoding="utf-8-sig", dtype="string",
+    keep_default_na=False, na_values=[""],
+)
 print("\nConferência do CSV gerado:")
 print(f"Linhas: {len(base_conferida)}")
 print(f"Colunas: {base_conferida.shape[1]}")
 print("Nomes das colunas:")
 print(base_conferida.columns.tolist())
+print(f"Presença de Nome_Produto: {'Nome_Produto' in base_conferida.columns}")
+if base_conferida.shape != (342697, 18) or "Nome_Produto" not in base_conferida.columns:
+    raise ValueError("Estrutura do CSV diferente da esperada.")
+tags_csv = base_conferida["Nome_Produto"].str.contains("<", regex=False, na=False).sum()
+entidades_csv = base_conferida["Nome_Produto"].str.contains("&#", regex=False, na=False).sum()
+print(f"Nome_Produto contendo '<' no CSV: {tags_csv}")
+print(f"Nome_Produto contendo '&#' no CSV: {entidades_csv}")
+if tags_csv > 0 or entidades_csv > 0:
+    raise ValueError("O CSV contém HTML não tratado em Nome_Produto.")

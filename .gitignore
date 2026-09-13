@@ -26,3 +26,8 @@ dados/brutos/**/*.csv
 dados/processados/**/*.csv
 dados/processados/**/*.xlsx
 dados/processados/**/*.parquet
+
+# Power BI PBIP: configurações locais, cache e backups binários
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+dashboard/*.pbix

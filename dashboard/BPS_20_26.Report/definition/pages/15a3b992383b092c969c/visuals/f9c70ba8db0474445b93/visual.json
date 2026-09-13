@@ -1,0 +1,381 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "f9c70ba8db0474445b93",
+  "position": {
+    "x": 0,
+    "y": 592,
+    "z": 7,
+    "height": 464,
+    "width": 1856,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Produto"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Nome Produto",
+              "nativeQueryRef": "Produto"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Código BR"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Codigo_br",
+              "nativeQueryRef": "Código BR"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Apresentação / Capacidade"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Unidade_Fornecimento_Capacidade",
+              "nativeQueryRef": "Apresentação / Capacidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Fornecedor"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Fornecedor",
+              "nativeQueryRef": "Fornecedor"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Fabricante"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Fabricante",
+              "nativeQueryRef": "Fabricante"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Instituicao Identificada"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Instituicao Identificada",
+              "nativeQueryRef": "Instituicao Identificada"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Estado"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Estado",
+              "nativeQueryRef": "Estado"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Data da Compra"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Data_Compra",
+              "nativeQueryRef": "Data da Compra"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Modalidade de Compra"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Modalidade_Compra",
+              "nativeQueryRef": "Modalidade de Compra"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Quantidade"
+                }
+              },
+              "queryRef": "Sum(BPS_20_26_Petras_Ruben_Carvalho.Quantidade)",
+              "nativeQueryRef": "Quantidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Preço Unitário"
+                }
+              },
+              "queryRef": "Sum(BPS_20_26_Petras_Ruben_Carvalho.Preco_Unitario)",
+              "nativeQueryRef": "Preço Unitário"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Valor Total"
+                }
+              },
+              "queryRef": "Sum(BPS_20_26_Petras_Ruben_Carvalho.Valor_Total)",
+              "nativeQueryRef": "Valor Total"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                  }
+                },
+                "Property": "Fabricante"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b6a90a16d3806473c505",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Produto"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "7b5d6cbd0c3176304940",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Apresentação / Capacidade"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ac5335f2242ac3e08e93",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Fornecedor"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "71252792a4e00946589b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Fabricante"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e0ea95584004d0a35e85",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Instituicao Identificada"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c11827fdd5cc1cc9a8a3",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Estado"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "96c6646560e0ad02dd84",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Modalidade de Compra"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ca52065ce620bd3881be",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Código BR"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "40a10f03819402a3d1c7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Data da Compra"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "b766c78637c8250001ec",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Quantidade"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "91bd1dde89690aa4ce0c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Preço Unitário"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "43c3c101c2002850d102",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Valor Total"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

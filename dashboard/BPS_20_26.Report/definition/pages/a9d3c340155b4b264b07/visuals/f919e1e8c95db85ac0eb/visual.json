@@ -1,0 +1,72 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "f919e1e8c95db85ac0eb",
+  "position": {
+    "x": 32,
+    "y": 592,
+    "z": 6003,
+    "height": 128,
+    "width": 192,
+    "tabOrder": 6003
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+                    }
+                  },
+                  "Property": "Modalidade de Compra"
+                }
+              },
+              "queryRef": "BPS_20_26_Petras_Ruben_Carvalho.Modalidade_Compra",
+              "nativeQueryRef": "Modalidade_Compra",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1f165b917cd740cd2a25",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
+              }
+            },
+            "Property": "Modalidade de Compra"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}
