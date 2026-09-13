@@ -31,3 +31,27 @@ dados/processados/**/*.parquet
 **/.pbi/localSettings.json
 **/.pbi/cache.abf
 dashboard/*.pbix
+
+# BPS - arquivos oficiais compactados que devem ser versionados
+!dados/brutos/2020_csv.zip
+!dados/brutos/2021_csv.zip
+!dados/brutos/2022_csv.zip
+!dados/brutos/2023_csv.zip
+!dados/brutos/2024_csv.zip
+!dados/brutos/2025_csv.zip
+!dados/brutos/2026_csv.zip
+
+# Copias anuais extraidas - nao versionar
+dados/brutos/2020/
+dados/brutos/2021/
+dados/brutos/2022/
+dados/brutos/2023/
+dados/brutos/2024/
+dados/brutos/2025/
+dados/brutos/2026/
+
+# Consolidado CSV grande - manter somente local
+dados/processados/BPS_20_26_Petras_Ruben_Carvalho.csv
+
+# Consolidado compactado - permitir versionamento
+!dados/processados/BPS_20_26_Petras_Ruben_Carvalho.zip

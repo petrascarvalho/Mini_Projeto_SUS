@@ -2,12 +2,15 @@
 import pandas as pd
 from pathlib import Path
 from html import unescape
+import sys
+import zipfile
 
 # 2. Definição das pastas
 raiz = Path(__file__).resolve().parent
 pasta_brutos = raiz / "dados" / "brutos"
 pasta_processados = raiz / "dados" / "processados"
-arquivo_saida = pasta_processados / "BPS_20_26_Petras_Ruben_Carvalho.csv"
+arquivo_padrao = pasta_processados / "BPS_20_26_Petras_Ruben_Carvalho.csv"
+arquivo_saida = Path(sys.argv[1]) if len(sys.argv) > 1 else arquivo_padrao
 
 # 3. Leitura dos arquivos de 2020 a 2026
 # Ler os identificadores como texto para preservar seus valores.
@@ -22,12 +25,20 @@ tipos = {
 bases = []
 print("Registros originais por ano:")
 for ano in range(2020, 2027):
-    arquivo = pasta_brutos / str(ano) / f"{ano}.csv"
-    # Reconhecer apenas os campos vazios como valores ausentes.
-    base_anual = pd.read_csv(
-        arquivo, sep=";", encoding="utf-8", dtype=tipos,
-        keep_default_na=False, na_values=[""], low_memory=False,
-    )
+    arquivo = pasta_brutos / f"{ano}_csv.zip"
+    with zipfile.ZipFile(arquivo) as arquivo_zip:
+        nomes_csv = [nome for nome in arquivo_zip.namelist()
+                     if nome.lower().endswith(".csv")]
+        if len(nomes_csv) != 1:
+            raise ValueError(f"ZIP de {ano} deve conter um único CSV.")
+        nome_csv = nomes_csv[0]
+        print(f"{ano}: CSV interno = {nome_csv}")
+        # Reconhecer apenas os campos vazios como valores ausentes.
+        with arquivo_zip.open(nome_csv) as csv_anual:
+            base_anual = pd.read_csv(
+                csv_anual, sep=";", encoding="utf-8", dtype=tipos,
+                keep_default_na=False, na_values=[""], low_memory=False,
+            )
     bases.append(base_anual)
     print(f"{ano}: {len(base_anual)} registros")
 
