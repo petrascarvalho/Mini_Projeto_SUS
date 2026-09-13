@@ -4,10 +4,10 @@
   "position": {
     "x": 312,
     "y": 320,
-    "z": 3,
+    "z": 3000,
     "height": 328,
     "width": 1576,
-    "tabOrder": 3
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "barChart",
@@ -116,7 +116,7 @@
             "labelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "4L"
+                  "Value": "2L"
                 }
               }
             },
@@ -286,14 +286,14 @@
             "labelDisplayUnits": {
               "expr": {
                 "Literal": {
-                  "Value": "1L"
+                  "Value": "1000L"
                 }
               }
             },
             "labelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "4L"
+                  "Value": "0L"
                 }
               }
             },
@@ -351,9 +351,24 @@
             }
           }
         }
+      ],
+      "general": [
+        {
+          "properties": {
+            "formatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'\"R$\" #,0.00'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "BPS_20_26_Petras_Ruben_Carvalho.Preco Medio Ponderado"
+          }
+        }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "background": [
         {
@@ -637,7 +652,8 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   },
   "filterConfig": {
     "filters": [
@@ -736,20 +752,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "7c95198f7a85b7740033",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
-              }
-            },
-            "Property": "Preço Médio Ponderado"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

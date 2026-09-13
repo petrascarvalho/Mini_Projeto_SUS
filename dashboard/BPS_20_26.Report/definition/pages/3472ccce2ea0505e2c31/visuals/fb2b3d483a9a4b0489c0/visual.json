@@ -4,10 +4,10 @@
   "position": {
     "x": 32,
     "y": 578,
-    "z": 2,
+    "z": 2000,
     "height": 418,
     "width": 916,
-    "tabOrder": 2
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "barChart",
@@ -220,7 +220,7 @@
             "innerPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "25L"
+                  "Value": "20L"
                 }
               }
             }
@@ -353,7 +353,6 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "background": [
         {
@@ -637,24 +636,11 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   },
   "filterConfig": {
     "filters": [
-      {
-        "name": "ef525ea28684eb73c5d4",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
-              }
-            },
-            "Property": "Valor Total Registrado"
-          }
-        },
-        "type": "Advanced"
-      },
       {
         "name": "eaad6338ccc7a4a07150",
         "field": {
@@ -667,7 +653,89 @@
             "Property": "Produto"
           }
         },
-        "type": "Categorical"
+        "type": "TopN",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "subquery",
+              "Expression": {
+                "Subquery": {
+                  "Query": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "b",
+                        "Entity": "BPS_20_26_Petras_Ruben_Carvalho",
+                        "Type": 0
+                      }
+                    ],
+                    "Select": [
+                      {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "b"
+                            }
+                          },
+                          "Property": "Produto"
+                        },
+                        "Name": "field"
+                      }
+                    ],
+                    "OrderBy": [
+                      {
+                        "Direction": 2,
+                        "Expression": {
+                          "Measure": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "b"
+                              }
+                            },
+                            "Property": "Valor Total Registrado"
+                          }
+                        }
+                      }
+                    ],
+                    "Top": 10
+                  }
+                }
+              },
+              "Type": 2
+            },
+            {
+              "Name": "b",
+              "Entity": "BPS_20_26_Petras_Ruben_Carvalho",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "b"
+                          }
+                        },
+                        "Property": "Produto"
+                      }
+                    }
+                  ],
+                  "Table": {
+                    "SourceRef": {
+                      "Source": "subquery"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
       }
     ]
   }

@@ -4,10 +4,10 @@
   "position": {
     "x": 32,
     "y": 608,
-    "z": 2,
+    "z": 2000,
     "height": 388,
     "width": 1856,
-    "tabOrder": 2
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "barChart",
@@ -84,7 +84,7 @@
             "labelDisplayUnits": {
               "expr": {
                 "Literal": {
-                  "Value": "1000000000L"
+                  "Value": "1L"
                 }
               }
             },
@@ -351,9 +351,24 @@
             }
           }
         }
+      ],
+      "general": [
+        {
+          "properties": {
+            "formatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'\"R$\" #,0.00'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "BPS_20_26_Petras_Ruben_Carvalho.Valor Total Registrado"
+          }
+        }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "background": [
         {
@@ -637,38 +652,7 @@
           }
         }
       ]
-    }
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "698ba4d325d73ee605be",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
-              }
-            },
-            "Property": "Modalidade de Compra"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "2698455a7a283bd656e8",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "BPS_20_26_Petras_Ruben_Carvalho"
-              }
-            },
-            "Property": "Valor Total Registrado"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
+    },
+    "drillFilterOtherVisuals": true
   }
 }

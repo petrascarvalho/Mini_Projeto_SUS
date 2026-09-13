@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "19b5b88e4f1841d585c6",
+  "name": "5edd48cedb0f454a95c9",
   "position": {
-    "x": 856,
-    "y": 1024,
-    "z": 7004,
-    "width": 760,
-    "height": 28,
-    "tabOrder": 7004
+    "x": 312,
+    "y": 298,
+    "z": 13000,
+    "height": 20,
+    "width": 1576,
+    "tabOrder": 13000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,15 +19,15 @@
               {
                 "textRuns": [
                   {
-                    "value": "Continue para a análise de Compradores e Produtos",
+                    "value": "Valores unitários inferiores a R$ 0,01 podem ser exibidos como R$ 0,00 devido ao arredondamento.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15px",
+                      "fontSize": "14px",
                       "color": "#5B6573"
                     }
                   }
                 ],
-                "horizontalTextAlignment": "right"
+                "horizontalTextAlignment": "left"
               }
             ]
           }
@@ -61,7 +61,7 @@
           }
         }
       ],
-      "dropShadow": [
+      "title": [
         {
           "properties": {
             "show": {
@@ -74,7 +74,7 @@
           }
         }
       ],
-      "title": [
+      "dropShadow": [
         {
           "properties": {
             "show": {
