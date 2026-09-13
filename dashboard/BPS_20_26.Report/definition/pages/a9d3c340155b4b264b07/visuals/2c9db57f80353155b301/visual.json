@@ -3,9 +3,9 @@
   "name": "2c9db57f80353155b301",
   "position": {
     "x": 32,
-    "y": 328,
+    "y": 334,
     "z": 6001,
-    "height": 88,
+    "height": 80,
     "width": 256,
     "tabOrder": 6001
   },
@@ -91,7 +91,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1F2937'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -140,7 +140,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#6B7280'"
+                      "Value": "'#5B6573'"
                     }
                   }
                 }
@@ -167,7 +167,7 @@
             "padding": {
               "expr": {
                 "Literal": {
-                  "Value": "6L"
+                  "Value": "4L"
                 }
               }
             }
@@ -226,7 +226,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1F2937'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -397,7 +397,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E5E7EB'"
+                      "Value": "'#D9E1E8'"
                     }
                   }
                 }
@@ -406,7 +406,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "8L"
+                  "Value": "10L"
                 }
               }
             },
@@ -494,7 +494,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E5E7EB'"
+                      "Value": "'#D9E1E8'"
                     }
                   }
                 }
@@ -505,7 +505,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#6B7280'"
+                      "Value": "'#5B6573'"
                     }
                   }
                 }

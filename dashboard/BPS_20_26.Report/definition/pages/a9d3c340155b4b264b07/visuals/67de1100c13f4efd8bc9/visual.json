@@ -6,7 +6,7 @@
     "y": 82,
     "z": 7001,
     "width": 1856,
-    "height": 30,
+    "height": 28,
     "tabOrder": 7001
   },
   "visual": {
@@ -19,11 +19,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Análise consolidada por ano, estado, município, instituição, fornecedor e fabricante",
+                    "value": "Base BPS 2020–2026 | Visão Geral",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "20px",
-                      "color": "#6B7280"
+                      "fontSize": "18px",
+                      "color": "#5B6573"
                     }
                   }
                 ],
@@ -93,28 +93,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             }

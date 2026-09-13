@@ -3,10 +3,10 @@
   "name": "0d43f46c0940475d90d6",
   "position": {
     "x": 32,
-    "y": 174,
+    "y": 192,
     "z": 7003,
     "width": 256,
-    "height": 44,
+    "height": 40,
     "tabOrder": 7003
   },
   "visual": {
@@ -19,11 +19,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Selecione os critérios para refinar os indicadores e gráficos",
+                    "value": "Selecione os filtros para refinar os indicadores e gráficos.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#6B7280"
+                      "fontSize": "15px",
+                      "color": "#5B6573"
                     }
                   }
                 ],
@@ -93,28 +93,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             }

@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "19b5b88e4f1841d585c6",
   "position": {
-    "x": 1112,
-    "y": 1030,
+    "x": 856,
+    "y": 1024,
     "z": 7004,
-    "width": 776,
+    "width": 760,
     "height": 28,
     "tabOrder": 7004
   },
@@ -19,11 +19,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Próxima página: Compradores e Produtos →",
+                    "value": "Continue para a análise de Compradores e Produtos",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#6B7280"
+                      "fontSize": "15px",
+                      "color": "#5B6573"
                     }
                   }
                 ],
@@ -93,28 +93,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             }
