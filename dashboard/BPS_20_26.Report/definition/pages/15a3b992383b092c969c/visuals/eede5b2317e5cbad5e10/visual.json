@@ -389,7 +389,7 @@
             "labelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "4L"
+                  "Value": "2L"
                 }
               }
             },
@@ -662,7 +662,7 @@
             "formatString": {
               "expr": {
                 "Literal": {
-                  "Value": "'\"R$\" #,0.0000'"
+                  "Value": "'\"R$\" #,0.00'"
                 }
               }
             }
