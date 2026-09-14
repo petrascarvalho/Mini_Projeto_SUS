@@ -965,7 +965,7 @@ Esse comportamento é resultado do arredondamento utilizado na apresentação vi
 ## 1. Clonar o Repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/petrascarvalho/Mini_Projeto_SUS
 ```
 
 Acessar a pasta:
