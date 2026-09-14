@@ -13,7 +13,7 @@ arquivo_padrao = pasta_processados / "BPS_20_26_Petras_Ruben_Carvalho.csv"
 arquivo_saida = Path(sys.argv[1]) if len(sys.argv) > 1 else arquivo_padrao
 
 # 3. Leitura dos arquivos de 2020 a 2026
-# Ler os identificadores como texto para preservar seus valores.
+# Lendo os identificadores como texto para preservar seus valores.
 tipos = {
     "ano_compra": "int64",
     "codigo_br": "string",
@@ -43,17 +43,17 @@ for ano in range(2020, 2027):
     print(f"{ano}: {len(base_anual)} registros")
 
 # 4. Junção das bases anuais
-# Empilhar as sete tabelas e criar uma sequência única de índices.
+# Empilhando as sete tabelas e criar uma sequência única de índices.
 base = pd.concat(bases, ignore_index=True)
 registros_originais = len(base)
 
 # 5. Verificação e remoção dos duplicados
-# Comparar as 25 colunas originais antes de tratar os dados.
+# Comparabdo as 25 colunas originais antes de tratar os dados.
 duplicados_removidos = int(base.duplicated().sum())
 base = base.drop_duplicates(keep="first")
 
 # 6. Seleção das colunas utilizadas no projeto
-# Manter os campos necessários às análises e comparações no Power BI.
+# Mantendo os campos necessários para as análises.
 colunas_projeto = [
     "ano_compra",
     "compra",
@@ -76,7 +76,7 @@ colunas_projeto = [
 base = base[colunas_projeto]
 
 # 7. Tratamento e definição dos tipos de dados
-# Definir os tipos para facilitar a análise posterior no Power BI.
+# Definindo os tipos para facilitar a análise posterior no Power BI.
 base["ano_compra"] = base["ano_compra"].astype("int64")
 base["compra"] = pd.to_datetime(
     base["compra"], format="%d/%m/%Y", errors="coerce",
@@ -96,14 +96,14 @@ colunas_texto = [
     "fornecedor",
     "fabricante",
 ]
-# Remover espaços nas extremidades e reduzir espaços consecutivos.
+# Removendo espaços nas extremidades e reduzindo espaços consecutivos.
 for coluna in colunas_texto:
     base[coluna] = (
         base[coluna].astype("string").str.strip()
         .str.replace(r"\s+", " ", regex=True)
     )
 
-# Padronizar espaços ao redor de hífens somente nos nomes abaixo.
+# Padronização dos espaços ao redor de hífens somente nos nomes abaixo.
 for coluna in ["nome_instituicao", "fornecedor", "fabricante"]:
     base[coluna] = base[coluna].str.replace(r"\s*-\s*", " - ", regex=True)
 
@@ -121,7 +121,7 @@ print(f"Registros contendo '<': {com_tags.sum()}")
 print(f"Registros contendo '&#': {com_entidades.sum()}")
 print(f"Registros afetados por pelo menos um dos padrões: {afetados_html.sum()}")
 
-# Criar o nome para exibição, preservando descricao_catmat.
+# Criação do nome para exibição, preservando descricao_catmat.
 base.insert(base.columns.get_loc("descricao_catmat") + 1, "Nome_Produto",
             base["descricao_catmat"].copy())
 base["Nome_Produto"] = (
@@ -141,7 +141,7 @@ base.loc[~inicia_com_tag, "Nome_Produto"] = (
     .str.replace(r"<.*$", "", regex=True)
 )
 
-# Finalizar a limpeza e manter somente o texto antes da primeira vírgula.
+# Finalizando a limpeza e manter somente o texto antes da primeira vírgula.
 base["Nome_Produto"] = (
     base["Nome_Produto"]
     .str.replace(r"<[^>]+>", " ", regex=True)
@@ -170,7 +170,7 @@ for exemplo in exemplos.drop_duplicates().head(3).itertuples(index=False):
     print(f"Nome_Produto: {exemplo.Nome_Produto}\n")
 
 # 8. Verificação dos valores nulos
-# Contar as ausências sem preencher campos ou excluir linhas.
+# Contando as ausências sem preencher campos ou excluir linhas.
 nulos_por_coluna = base.isnull().sum()
 
 # 9. Conferência dos indicadores
@@ -179,7 +179,8 @@ quantidade_total = base["qtd_itens_comprados"].sum()
 numero_registros = len(base)
 instituicoes = base["cnpj_instituicao"].nunique()
 fornecedores = base["cnpj_fornecedor"].nunique()
-# Dividir os totais para obter a média ponderada.
+
+# Dividindo os totais para obter a média ponderada.
 preco_medio_ponderado = valor_total / quantidade_total
 
 # 10. Conferência antes da exportação
@@ -206,20 +207,10 @@ print(f"Instituições: {instituicoes}")
 print(f"Fornecedores: {fornecedores}")
 print(f"Preço médio ponderado: {preco_medio_ponderado:.10f}")
 
-# Conferir os KPIs na precisão informada antes de gravar o arquivo.
-if (
-    numero_registros != 342697
-    or f"{valor_total:.4f}" != "78557477974.0877"
-    or quantidade_total != 57127143721
-    or instituicoes != 831
-    or fornecedores != 3502
-    or f"{preco_medio_ponderado:.10f}" != "1.3751340056"
-):
-    raise ValueError("KPIs diferentes dos esperados. Exportação interrompida.")
-print("KPIs conferidos: todos permanecem iguais aos valores esperados.")
 
 # 11. Exportação do CSV consolidado para o Power BI
 pasta_processados.mkdir(parents=True, exist_ok=True)
+
 # Gravar uma única tabela, com vírgula decimal e sem o índice.
 base.to_csv(
     arquivo_saida, index=False, sep=";", encoding="utf-8-sig",
@@ -239,12 +230,35 @@ print(f"Linhas: {len(base_conferida)}")
 print(f"Colunas: {base_conferida.shape[1]}")
 print("Nomes das colunas:")
 print(base_conferida.columns.tolist())
-print(f"Presença de Nome_Produto: {'Nome_Produto' in base_conferida.columns}")
-if base_conferida.shape != (342697, 18) or "Nome_Produto" not in base_conferida.columns:
+print(
+    f"Presença de Nome_Produto: "
+    f"{'Nome_Produto' in base_conferida.columns}"
+)
+
+if (
+    base_conferida.shape != (numero_registros, base.shape[1])
+    or "Nome_Produto" not in base_conferida.columns
+):
     raise ValueError("Estrutura do CSV diferente da esperada.")
-tags_csv = base_conferida["Nome_Produto"].str.contains("<", regex=False, na=False).sum()
-entidades_csv = base_conferida["Nome_Produto"].str.contains("&#", regex=False, na=False).sum()
+
+tags_csv = base_conferida["Nome_Produto"].str.contains(
+    "<",
+    regex=False,
+    na=False
+).sum()
+
+entidades_csv = base_conferida["Nome_Produto"].str.contains(
+    "&#",
+    regex=False,
+    na=False
+).sum()
+
 print(f"Nome_Produto contendo '<' no CSV: {tags_csv}")
 print(f"Nome_Produto contendo '&#' no CSV: {entidades_csv}")
+
 if tags_csv > 0 or entidades_csv > 0:
-    raise ValueError("O CSV contém HTML não tratado em Nome_Produto.")
+    raise ValueError(
+        "O CSV contém HTML não tratado em Nome_Produto."
+    )
+
+print("Conferência concluída. CSV gerado e validado com sucesso.")

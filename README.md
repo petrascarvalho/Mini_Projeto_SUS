@@ -10,14 +10,14 @@ Este repositório contém o desenvolvimento completo do processo de aquisição,
 
 O objetivo principal do projeto é transformar registros públicos de compras de medicamentos, materiais e dispositivos médicos em informações analíticas que permitam compreender valores registrados, quantidades adquiridas, instituições compradoras, fornecedores, fabricantes, modalidades de compra e diferenças de preços praticados no período de **2020 a 2026**.
 
-O projeto foi desenvolvido utilizando **Python e Pandas para preparação e consolidação dos dados** e **Microsoft Power BI para modelagem das métricas e construção do dashboard analítico**.
+O projeto foi desenvolvido utilizando **Python e Pandas para preparação, validação e consolidação dos dados** e **Microsoft Power BI para modelagem das métricas e construção do dashboard analítico**.
 
 ---
 
 ## 📊 Ferramentas e Tecnologias Utilizadas
 
 - **VS Code** - Ambiente de desenvolvimento utilizado para criação e manutenção do projeto.
-- **Python 3** - Linguagem utilizada para leitura, tratamento e consolidação das bases.
+- **Python 3** - Linguagem utilizada para leitura, tratamento, validação e consolidação das bases.
 - **Pandas** - Biblioteca utilizada para manipulação, preparação e análise dos DataFrames.
 - **Microsoft Power BI** - Ferramenta utilizada para criação das métricas, análises e dashboard interativo.
 - **DAX** - Linguagem utilizada para construção das medidas analíticas no Power BI.
@@ -40,7 +40,7 @@ A análise busca responder questões relacionadas a:
 - fornecedores com maior participação;
 - fabricantes com maior participação;
 - modalidades de compra mais utilizadas;
-- diferenças dos preços unitários entre registros comparáveis;
+- diferenças de preços unitários entre registros comparáveis;
 - identificação de situações que possam representar oportunidades de investigação.
 
 O projeto não busca classificar automaticamente diferenças de preços como economia, sobrepreço ou irregularidade.
@@ -115,13 +115,15 @@ Mini_Projeto_SUS/
 │   ├── BPS_20_26.Report/
 │   └── BPS_20_26.SemanticModel/
 │
-└── documentacao/
-    ├── analises/
-    └── painel/
-        ├── 01_visao_geral.png
-        ├── 02_compradores_produtos.png
-        ├── 03_mercado_fornecimento.png
-        └── 04_analise_precos.png
+├── documentacao/
+│   ├── analises/
+│   └── painel/
+│       ├── 01_visao_geral.png
+│       ├── 02_compradores_produtos.png
+│       ├── 03_mercado_fornecimento.png
+│       └── 04_analise_precos.png
+│
+└── scripts/
 ```
 
 Os arquivos anuais originais são mantidos compactados na pasta:
@@ -142,7 +144,7 @@ dados/processados/BPS_20_26_Petras_Ruben_Carvalho.zip
 
 # ⚙️ Arquitetura do Pipeline e Lógica de Negócio
 
-O processamento dos dados foi desenvolvido em Python utilizando uma sequência de etapas de leitura, auditoria, consolidação, tratamento e exportação.
+O processamento dos dados foi desenvolvido em Python utilizando uma sequência de etapas de leitura, auditoria, consolidação, tratamento, validação e exportação.
 
 O script principal do projeto é:
 
@@ -166,7 +168,7 @@ dados/brutos/2025_csv.zip
 dados/brutos/2026_csv.zip
 ```
 
-Cada arquivo ZIP contém a respectiva base anual do Banco de Preços em Saúde.
+Cada arquivo ZIP deve conter um único CSV referente ao respectivo ano do Banco de Preços em Saúde.
 
 Essa abordagem permite trabalhar diretamente com os arquivos oficiais compactados, sem necessidade de manter cópias adicionais dos CSVs extraídos.
 
@@ -217,7 +219,7 @@ Distribuição das duplicidades identificadas:
 - 2025: 1 registro;
 - 2026: 2 registros.
 
-Os registros duplicados foram identificados considerando todas as colunas originais da base.
+Os registros duplicados foram identificados considerando as **25 colunas originais da base**, antes da seleção das colunas analíticas utilizadas no projeto.
 
 Após a deduplicação, a base passou de:
 
@@ -254,7 +256,7 @@ Por esse motivo, informações como:
 - CNPJ da instituição;
 - CNPJ do fornecedor;
 
-foram preservadas como dados textuais.
+foram preservadas como dados textuais durante a preparação dos dados.
 
 Esse procedimento reduz o risco de problemas relacionados à interpretação numérica de identificadores, como perda de zeros ou realização de operações matemáticas indevidas.
 
@@ -264,6 +266,8 @@ Também foram tratados os campos relacionados a:
 - quantidades;
 - preços unitários;
 - valores totais.
+
+Os valores ausentes são contabilizados para diagnóstico, sem preenchimento automático e sem exclusão de linhas apenas por esse motivo.
 
 ---
 
@@ -277,7 +281,7 @@ Para melhorar a utilização dos produtos em filtros, rankings e gráficos do Po
 Nome_Produto
 ```
 
-Essa coluna recebe um tratamento específico para remover elementos de HTML e produzir um nome mais adequado para apresentação visual.
+Essa coluna recebe tratamento específico para remover elementos de HTML e produzir um nome mais adequado para apresentação visual.
 
 A coluna técnica original:
 
@@ -289,51 +293,85 @@ foi preservada integralmente.
 
 Dessa forma, o projeto mantém a informação técnica original e, ao mesmo tempo, disponibiliza uma versão mais adequada para utilização nas análises.
 
-Ao final do processo, a coluna `Nome_Produto` não apresentou tags HTML ou entidades HTML residuais.
+Ao final do processo, a coluna `Nome_Produto` não apresentou valores vazios, tags HTML ou entidades HTML residuais.
 
 Nenhum registro foi removido durante essa etapa.
 
 ---
 
-### 7. Seleção das Colunas Analíticas
+### 7. Seleção das Colunas Analíticas e Mapeamento no Power BI
 
-Após o tratamento foram selecionadas **18 colunas** para formar a base utilizada no Power BI.
+Após o tratamento foram selecionadas **18 colunas** para formar a base consolidada utilizada no Power BI.
 
-| Coluna | Descrição |
-|---|---|
-| `ano_compra` | Ano da compra |
-| `compra` | Data da compra |
-| `nome_instituicao` | Nome da instituição compradora |
-| `cnpj_instituicao` | CNPJ da instituição |
-| `municipio_instituicao` | Município da instituição |
-| `uf` | Unidade Federativa |
-| `codigo_br` | Código BR do produto |
-| `descricao_catmat` | Descrição técnica original |
-| `Nome_Produto` | Nome tratado do produto |
-| `unidade_fornecimento` | Unidade de fornecimento |
-| `unidade_fornecimento_capacidade` | Apresentação ou capacidade |
-| `modalidade_compra` | Modalidade de compra |
-| `cnpj_fornecedor` | CNPJ do fornecedor |
-| `fornecedor` | Nome do fornecedor |
-| `fabricante` | Fabricante |
-| `qtd_itens_comprados` | Quantidade registrada |
-| `preco_unitario` | Preço unitário |
-| `preco_total` | Valor total registrado |
+No arquivo CSV, as colunas mantêm os nomes técnicos utilizados pelo script Python. Durante a carga no Power BI, esses campos foram renomeados para nomes mais amigáveis para análise e apresentação.
+
+| Coluna no CSV | Nome no Power BI | Descrição |
+|---|---|---|
+| `ano_compra` | `Ano` | Ano da compra |
+| `compra` | `Data da Compra` | Data da compra |
+| `nome_instituicao` | `Instituição` | Nome da instituição compradora |
+| `cnpj_instituicao` | `CNPJ Instituição` | CNPJ da instituição |
+| `municipio_instituicao` | `Municipio` | Município da instituição |
+| `uf` | `Estado` | Unidade Federativa |
+| `codigo_br` | `Código BR` | Código BR do produto |
+| `descricao_catmat` | `Descrição Técnica do Produto` | Descrição técnica original |
+| `Nome_Produto` | `Produto` | Nome tratado do produto |
+| `unidade_fornecimento` | `Unidade de Fornecimento` | Unidade de fornecimento |
+| `unidade_fornecimento_capacidade` | `Apresentação / Capacidade` | Apresentação ou capacidade |
+| `modalidade_compra` | `Modalidade de Compra` | Modalidade de compra |
+| `cnpj_fornecedor` | `CNPJ Fornecedor` | CNPJ do fornecedor |
+| `fornecedor` | `Fornecedor` | Nome do fornecedor |
+| `fabricante` | `Fabricante` | Fabricante |
+| `qtd_itens_comprados` | `Quantidade` | Quantidade registrada |
+| `preco_unitario` | `Preço Unitário` | Preço unitário |
+| `preco_total` | `Valor Total` | Valor total registrado |
+
+Além das 18 colunas carregadas do CSV, o modelo do Power BI possui a coluna calculada:
+
+```text
+Instituicao Identificada
+```
+
+Ela combina o nome da instituição com o respectivo CNPJ para facilitar a identificação correta nos filtros e análises.
+
+O modelo também contém medidas DAX, como:
+
+- Número de Registros;
+- Valor Total Registrado;
+- Quantidade Total;
+- Instituições Compradoras;
+- Fornecedores;
+- Preço Médio Ponderado;
+- Preço Unitário Mínimo;
+- Preço Unitário Máximo;
+- Variação de Preço.
+
+Essas medidas não fazem parte das 18 colunas do CSV; elas são calculadas dentro do Power BI.
 
 ---
 
-### 8. Salvando os Dados - Exportação
+### 8. Validação e Exportação dos Dados
 
-Após a conclusão das etapas de tratamento, a base consolidada é exportada no formato CSV:
+Após a conclusão das etapas de tratamento, o script calcula e exibe os principais indicadores no terminal para conferência. Em seguida, exporta a base consolidada e realiza uma releitura do CSV gerado para validar sua estrutura e a integridade da coluna `Nome_Produto`.
+
+A base consolidada é exportada no formato CSV para:
 
 ```text
 dados/processados/BPS_20_26_Petras_Ruben_Carvalho.csv
 ```
 
+O arquivo é gravado utilizando:
+
+- separador `;`;
+- codificação `utf-8-sig`;
+- vírgula como separador decimal;
+- datas no formato `dd/mm/aaaa`;
+- `index=False`.
+
 O arquivo consolidado possui:
 
-- **342.697 registros**
-- **18 colunas**
+- **342.697 registros**;
+- **18 colunas**.
 
 O CSV completo possui aproximadamente **117,5 MB**.
 
@@ -345,7 +383,15 @@ Para disponibilização no repositório foi criada a versão compactada:
 dados/processados/BPS_20_26_Petras_Ruben_Carvalho.zip
 ```
 
-A compactação reduz significativamente o tamanho necessário para armazenamento e publicação.
+Após a gravação, o próprio script relê o CSV para confirmar:
+
+- quantidade de linhas;
+- quantidade de colunas;
+- presença da coluna `Nome_Produto`;
+- correspondência entre a estrutura exportada e a base processada;
+- ausência de HTML residual em `Nome_Produto`.
+
+Se todas as verificações forem concluídas sem erro, o script informa no terminal que o CSV foi gerado e validado com sucesso.
 
 ---
 
@@ -381,7 +427,7 @@ Identificar a quantidade de registros existentes na base ou dentro do contexto s
 ### Medida DAX
 
 ```DAX
-Numero de Registros =
+Número de Registros =
 COUNTROWS('BPS_20_26_Petras_Ruben_Carvalho')
 ```
 
@@ -407,7 +453,7 @@ Calcular o valor financeiro total dos registros presentes no Banco de Preços em
 
 ```DAX
 Valor Total Registrado =
-SUM('BPS_20_26_Petras_Ruben_Carvalho'[Valor_Total])
+SUM('BPS_20_26_Petras_Ruben_Carvalho'[Valor Total])
 ```
 
 ### Por que essa métrica foi criada?
@@ -468,7 +514,7 @@ Calcular a quantidade de instituições distintas presentes na base.
 ```DAX
 Instituicoes Compradoras =
 DISTINCTCOUNT(
-    'BPS_20_26_Petras_Ruben_Carvalho'[Cnpj_Instituicao]
+    'BPS_20_26_Petras_Ruben_Carvalho'[CNPJ Instituição]
 )
 ```
 
@@ -497,7 +543,7 @@ Identificar a quantidade distinta de fornecedores presentes nos registros.
 ```DAX
 Fornecedores =
 DISTINCTCOUNT(
-    'BPS_20_26_Petras_Ruben_Carvalho'[Cnpj_Fornecedor]
+    'BPS_20_26_Petras_Ruben_Carvalho'[CNPJ Fornecedor]
 )
 ```
 
@@ -524,11 +570,8 @@ Calcular um preço médio considerando o peso das quantidades registradas.
 ### Medida DAX
 
 ```DAX
-Preco Medio Ponderado =
-DIVIDE(
-    [Valor Total Registrado],
-    [Quantidade Total]
-)
+Preço Médio Ponderado =
+[Valor Total Registrado] / [Quantidade Total]
 ```
 
 ### Por que essa métrica foi criada?
@@ -544,6 +587,8 @@ O cálculo considera a relação entre o valor total registrado e a quantidade t
 ### Resultado Geral
 
 **R$ 1,3751**
+
+> **Observação:** o Preço Médio Ponderado deve ser interpretado com cautela quando o contexto contém produtos, unidades de fornecimento ou apresentações diferentes. Para comparação de preços, recomenda-se filtrar produtos equivalentes.
 
 ---
 
@@ -564,10 +609,10 @@ Identificar o menor preço unitário positivo dentro do contexto selecionado.
 ### Medida DAX
 
 ```DAX
-Preco Unitario Minimo =
+Preço Unitário Mínimo =
 CALCULATE(
-    MIN('BPS_20_26_Petras_Ruben_Carvalho'[Preco_Unitario]),
-    'BPS_20_26_Petras_Ruben_Carvalho'[Preco_Unitario] > 0
+    MIN('BPS_20_26_Petras_Ruben_Carvalho'[Preço Unitário]),
+    'BPS_20_26_Petras_Ruben_Carvalho'[Preço Unitário] > 0
 )
 ```
 
@@ -594,9 +639,9 @@ Identificar o maior preço unitário dentro do contexto selecionado.
 ### Medida DAX
 
 ```DAX
-Preco Unitario Maximo =
+Preço Unitário Máximo =
 MAX(
-    'BPS_20_26_Petras_Ruben_Carvalho'[Preco_Unitario]
+    'BPS_20_26_Petras_Ruben_Carvalho'[Preço Unitário]
 )
 ```
 
@@ -617,8 +662,8 @@ Calcular a diferença absoluta entre o maior e o menor preço unitário encontra
 ### Medida DAX
 
 ```DAX
-Variacao de Preco =
-[Preco Unitario Maximo] - [Preco Unitario Minimo]
+Variação de Preço =
+[Preço Unitário Máximo] - [Preço Unitário Mínimo]
 ```
 
 ### Por que essa métrica foi criada?
@@ -684,6 +729,20 @@ As mesmas medidas são reutilizadas dinamicamente em diferentes contextos de an�
 
 ---
 
+# 🔍 Critérios para Comparação de Preços
+
+Para aumentar a comparabilidade dos registros, a análise de preços deve priorizar compras que possuam:
+
+- mesmo Produto;
+- mesmo Código BR;
+- mesma Apresentação / Capacidade.
+
+Mesmo após esses filtros, diferenças de preço devem ser analisadas considerando fabricante, unidade de fornecimento, quantidade adquirida, instituição, localidade, modalidade da compra e período.
+
+Uma diferença de preço não representa, isoladamente, economia, sobrepreço ou irregularidade.
+
+---
+
 # 📊 Dashboard - Microsoft Power BI
 
 Além da construção visual do painel, o Power BI foi utilizado como camada analítica do projeto.
@@ -727,7 +786,9 @@ Filtros disponíveis:
 - Fabricante;
 - Modalidade de Compra.
 
-![Visão Geral do Dashboard](documentacao/painel/01_visao_geral.png)
+<p align="center">
+  <img src="./documentacao/painel/01_visao_geral.png" alt="Visão Geral do Dashboard" width="100%">
+</p>
 
 ---
 
@@ -738,13 +799,15 @@ Esta página foi desenvolvida para identificar os principais compradores e produ
 Apresenta:
 
 - Top 10 Municípios por Valor Total Registrado;
-- Top 10 Instituições;
+- Top 10 Instituições por Valor Total Registrado;
 - Top 10 Produtos por Valor Total Registrado;
 - Top 10 Produtos por Quantidade.
 
 A utilização de rankings permite identificar de maneira rápida os grupos com maior participação na base.
 
-![Compradores e Produtos](documentacao/painel/02_compradores_produtos.png)
+<p align="center">
+  <img src="./documentacao/painel/02_compradores_produtos.png" alt="Compradores e Produtos" width="100%">
+</p>
 
 ---
 
@@ -754,13 +817,15 @@ Esta página permite analisar os principais participantes do mercado fornecedor.
 
 Apresenta:
 
-- Top 10 Fornecedores;
-- Top 10 Fabricantes;
+- Top 10 Fornecedores por Valor Total Registrado;
+- Top 10 Fabricantes por Valor Total Registrado;
 - Valor Total Registrado por Modalidade de Compra.
 
 Essa visão permite observar a concentração dos valores entre fornecedores, fabricantes e modalidades utilizadas.
 
-![Mercado de Fornecimento](documentacao/painel/03_mercado_fornecimento.png)
+<p align="center">
+  <img src="./documentacao/painel/03_mercado_fornecimento.png" alt="Mercado de Fornecimento" width="100%">
+</p>
 
 ---
 
@@ -785,7 +850,9 @@ Também foi incluída uma tabela contendo o detalhamento dos registros seleciona
 
 A combinação dos filtros permite aumentar a comparabilidade entre os produtos analisados.
 
-![Análise de Preços](documentacao/painel/04_analise_precos.png)
+<p align="center">
+  <img src="./documentacao/painel/04_analise_precos.png" alt="Análise de Preços" width="100%">
+</p>
 
 ---
 
@@ -965,7 +1032,7 @@ Esse comportamento é resultado do arredondamento utilizado na apresentação vi
 ## 1. Clonar o Repositório
 
 ```bash
-git clone https://github.com/petrascarvalho/Mini_Projeto_SUS
+git clone https://github.com/petrascarvalho/Mini_Projeto_SUS.git
 ```
 
 Acessar a pasta:
@@ -1008,9 +1075,11 @@ O script realizará:
 - concatenação das bases anuais;
 - identificação e remoção das duplicidades;
 - tratamento dos tipos de dados;
+- diagnóstico dos valores ausentes;
 - tratamento dos nomes dos produtos;
 - seleção das colunas analíticas;
-- geração da base consolidada.
+- cálculo e exibição dos principais indicadores para conferência;
+- geração e conferência da base consolidada.
 
 Ao final será criado:
 
@@ -1030,7 +1099,7 @@ dashboard/BPS_20_26.pbip
 
 utilizando o **Microsoft Power BI Desktop**.
 
-Caso o projeto seja executado em outro computador, pode ser necessário atualizar o caminho local utilizado pela fonte de dados do Power BI.
+Caso o projeto seja executado em outro computador, pode ser necessário atualizar o caminho local utilizado pela fonte de dados do Power BI para localizar o CSV consolidado.
 
 ---
 
@@ -1041,14 +1110,17 @@ O projeto foi desenvolvido utilizando Git para registrar as principais etapas do
 O histórico de commits documenta etapas relacionadas a:
 
 - preparação inicial do projeto;
+- entendimento dos dados e perguntas de negócio;
 - tratamento e consolidação dos dados;
+- definição e validação das métricas e KPIs;
 - desenvolvimento do dashboard;
 - ajustes na modelagem;
 - redesign visual;
 - implementação da navegação entre páginas;
 - melhorias de usabilidade;
 - ajustes finais do dashboard;
-- preparação dos arquivos compactados para publicação.
+- preparação dos arquivos compactados para publicação;
+- documentação final do projeto.
 
 A utilização do controle de versão permitiu acompanhar a evolução do trabalho e preservar diferentes estágios do desenvolvimento.
 
@@ -1073,16 +1145,16 @@ O desenvolvimento deste Mini Projeto permitiu aplicar de forma integrada conceit
 
 A base original composta por sete arquivos anuais foi transformada em um conjunto histórico consolidado contendo:
 
-- **342.697 registros**
-- **18 colunas analíticas**
-- **831 instituições compradoras**
-- **3.502 fornecedores**
-- **R$ 78,56 bilhões em valores registrados**
-- **57,13 bilhões em quantidade registrada**
+- **342.697 registros**;
+- **18 colunas analíticas**;
+- **831 instituições compradoras**;
+- **3.502 fornecedores**;
+- **R$ 78,56 bilhões em valores registrados**;
+- **57,13 bilhões em quantidade registrada**.
 
 A utilização conjunta de **Python, Pandas e Microsoft Power BI** permitiu construir uma solução analítica completa, desde a leitura dos arquivos originais até a apresentação das informações em um dashboard interativo.
 
-O Python foi utilizado para garantir a preparação e consistência dos dados, enquanto o Power BI foi utilizado não apenas para visualização, mas também para construção da camada analítica por meio das medidas desenvolvidas em DAX.
+O Python foi utilizado para garantir a preparação, validação e consistência dos dados, enquanto o Power BI foi utilizado não apenas para visualização, mas também para construção da camada analítica por meio das medidas desenvolvidas em DAX.
 
 ---
 
@@ -1095,6 +1167,8 @@ O Python foi utilizado para garantir a preparação e consistência dos dados, e
 - **Preservação da Informação:** manutenção da descrição técnica original dos produtos enquanto uma nova coluna foi criada especificamente para facilitar filtros e visualizações.
 
 - **Governança dos Dados:** preservação dos arquivos originais compactados e separação entre dados brutos e dados processados.
+
+- **Validação do Pipeline:** exibição dos principais indicadores no terminal e releitura do CSV consolidado para validar estrutura e integridade.
 
 - **Modelagem Analítica:** criação de medidas DAX que permitem calcular dinamicamente registros, valores, quantidades, instituições, fornecedores e preços.
 
